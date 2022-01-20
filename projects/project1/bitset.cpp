@@ -35,10 +35,8 @@ Bitset::Bitset(const std::string & binary_value){
         }
         else{ 
             isValid == false;
-        }
-    }
-    
-    //here put if the bitset contains anything other than "1" or "0", it is invalid (isValid == false)
+        } 
+    } 
 }
 
 //Method returns the size of the bitset (accessor)
@@ -54,23 +52,29 @@ bool Bitset::good() const{
 }
 
 //Method to set the nth to the value 1 (mutator)
-void Bitset::set(intmax_t index){
-    //set method argument equal to your private variable 
+void Bitset::set(intmax_t n){
+    if(n>0 && n<N){ //test if n is in [0, N-1]:
+        isValid == true; }
+    else{
+        isValid == false;}
+
+    //set the nth bit to value 1
+    binary_value[n] == '1'; 
 }
 
 //Method to reset the nth bit to the value 0 (mutator)
-void Bitset::reset(intmax_t index){
-    //set method argument equal to your private variable
+void Bitset::reset(intmax_t n){
+    n = 0;
 }
 
 //Method to toggle the nth bit (mutator)
-void Bitset::toggle(intmax_t index){
-    //set method argument equal to your private variable
+void Bitset::toggle(intmax_t n){
+    n = 
 }
 
 //Check if the nth bit is set to 1, return T for 1 otherwise return F for 0 (accessor)
-bool Bitset::test(intmax_t index){
-    //accessor function with return statement
+bool Bitset::test(intmax_t n){
+    return isValid;
 }
 
 //Get the bitset and convert it to a string and return the string (accessor)
