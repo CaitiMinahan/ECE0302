@@ -59,7 +59,7 @@ void Bitset::set(intmax_t n){
         isValid == false;}
 
     //set the nth bit to value 1
-    binary_value[n] == '1'; 
+    //binary_value[n] == '1'; 
 }
 
 //Method to reset the nth bit to the value 0 (mutator)
@@ -69,7 +69,7 @@ void Bitset::reset(intmax_t n){
 
 //Method to toggle the nth bit (mutator)
 void Bitset::toggle(intmax_t n){
-    n = 
+    //n = 
 }
 
 //Check if the nth bit is set to 1, return T for 1 otherwise return F for 0 (accessor)
