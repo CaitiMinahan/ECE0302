@@ -5,18 +5,19 @@
 class Bitset{
 public:
 
-  // TODO COMMENT
+  //Default construction of a valid bitset
   Bitset();
 
-  // TODO COMMENT
+  //Construction of a valid bitset of size N
   Bitset(intmax_t size);
 
-  // TODO COMMENT
+  //Construction of a valid bitset with a string of 1's and 0's
   Bitset(const std::string & value);
 
   // TODO COMMENT
   ~Bitset();
 
+  //shows that this is a not copy constructible 
   Bitset(const Bitset & ) = delete;
   Bitset & operator=(const Bitset &) = delete;
 
@@ -42,8 +43,8 @@ public:
   std::string asString() const;
 
 private:
-
-  // TODO
+  //variable to state validity of a biset
+  bool isValid;
 };
 
 #endif
