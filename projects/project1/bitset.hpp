@@ -50,6 +50,7 @@ private:
                 //  2) bitset contains characters other than 1 or 0 
                 //  3) when setting the nth bit of the bitset, the n is outside of [0, N-1}]
 
+  char * bitset; //bitset array to be created
   intmax_t N, n; //private variables representing the size (N), and the nth bit (n)
 };
 

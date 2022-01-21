@@ -33,21 +33,29 @@ TEST_CASE( "Test INVALID bitset construction", "[bitset size 0]" ) {
 //Test case to determine VALID bitset with a string of 1's and 0's
 TEST_CASE( "Test VALID bitset string construction", "[bitset size N initialized with string of 1's and 0's]" ) {
     Bitset b("1110111");
+    REQUIRE(b.size() == 7); //test the size method 
+    REQUIRE(b.asString() == "1110111"); //test the asString method 
+
+    //test the set method
+    b.set(3); 
+    REQUIRE(b.asString() == "1111111");
+
+    //test the reset method 
+    b.reset(0);
+    REQUIRE(b.asString() == "0111111");
+
+    //test the toggle method
+    b.toggle(0);
+    b.toggle(3);
+    REQUIRE(b.asString() == "1110111");
 
     REQUIRE(b.good()); //calls good method to require the bitset to only contain 1's and 0's
+    
 }
 
 //Test case to determine INVALID bitset with a string of NOT 1's and 0's
 TEST_CASE( "Test INVALID bitset string construction", "[bitset size N initialized with string of 1's and 0's]" ) {
     Bitset b("123456789"); //put values here that are NOT binary values 
-    
-    REQUIRE_FALSE(b.good()); //calls good method to return boolean value for bitsit (should be invalid here)
-}
 
-//Test case to determine VALID bitset with the nth element set to the value 1
-TEST_CASE( "Test VALID bitset setting nth bit to 1", "[set nth bit to 1]" ) {
-    Bitset b("1110111");
- 
-    //REQUIRE(b.set(1)); //should set bit 1 to the value 1 
-    REQUIRE(b.good()); 
+    REQUIRE_FALSE(b.good()); //calls good method to return boolean value for bitsit (should be invalid here)
 }
