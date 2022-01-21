@@ -69,8 +69,6 @@ void Bitset::set(intmax_t n){
     else{
         isValid == false;}
 
-    //set the nth bit to value 1
-    //
 }
 
 //Method to reset the nth bit to the value 0 (mutator)
