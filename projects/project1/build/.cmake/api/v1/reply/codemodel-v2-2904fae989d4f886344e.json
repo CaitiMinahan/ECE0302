@@ -57,8 +57,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/caiti/starter-code-ece0302/projects/project1/build",
-		"source" : "/home/caiti/starter-code-ece0302/projects/project1"
+		"build" : "/home/caiti/ECE0302/projects/project1/build",
+		"source" : "/home/caiti/ECE0302/projects/project1"
 	},
 	"version" : 
 	{

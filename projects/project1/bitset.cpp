@@ -12,9 +12,9 @@ Bitset::Bitset(){
   }
 
 //Construction of a valid bitset of size N
-Bitset::Bitset(intmax_t N){
-    bitset = new char [N]; 
-    
+Bitset::Bitset(intmax_t size){
+    bitset = new char [size]; 
+    N = size;
     for(int i=0; i<N; i++){ //set all of the bits set to 0 using a for loop
       reset(i);}
     //define scenarios for when bitset is valid or invalid:
@@ -104,7 +104,8 @@ bool Bitset::test(intmax_t n){
             return false;} //return bool value of false if nth bit is set to 0
         }
     else{
-        isValid == false;}
+        isValid == false;
+        return false;}
 }
 
 //Get the bitset and convert it to a string and return the string (accessor)
