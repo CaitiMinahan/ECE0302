@@ -27,7 +27,7 @@ TEST_CASE( "Test INVALID bitset construction", "[bitset size 0]" ) {
     Bitset b(0); //input an invalid size for bitset (her N=0)
 
     REQUIRE(b.size() == 0);
-    REQUIRE_FALSE(b.good()); //calls good method to return boolean value for bitsit (should be invalid here)
+    REQUIRE(!b.good()); //calls good method to return boolean value for bitsit (should be invalid here)
 }
 
 //Test case to determine VALID bitset with a string of 1's and 0's
