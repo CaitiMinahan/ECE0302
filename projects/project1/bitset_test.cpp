@@ -49,6 +49,10 @@ TEST_CASE( "Test VALID bitset string construction", "[bitset size N initialized 
     b.toggle(3);
     REQUIRE(b.asString() == "1110111"); //shows that toggle works but flipping bits 0 and 3
 
+    //test the test method 
+    REQUIRE(b.test(0) == true);
+    REQUIRE(b.test(3) == false);
+
     REQUIRE(b.good()); //calls good method to require the bitset to only contain 1's and 0's
 }
 
