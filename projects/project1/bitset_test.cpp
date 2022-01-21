@@ -38,19 +38,18 @@ TEST_CASE( "Test VALID bitset string construction", "[bitset size N initialized 
 
     //test the set method
     b.set(3); 
-    REQUIRE(b.asString() == "1111111");
+    REQUIRE(b.asString() == "1111111"); //shows that set works but changing bit 3 to a 1
 
     //test the reset method 
     b.reset(0);
-    REQUIRE(b.asString() == "0111111");
+    REQUIRE(b.asString() == "0111111"); //shows that reset works but chaning bit 0 to a 0
 
     //test the toggle method
     b.toggle(0);
     b.toggle(3);
-    REQUIRE(b.asString() == "1110111");
+    REQUIRE(b.asString() == "1110111"); //shows that toggle works but flipping bits 0 and 3
 
     REQUIRE(b.good()); //calls good method to require the bitset to only contain 1's and 0's
-    
 }
 
 //Test case to determine INVALID bitset with a string of NOT 1's and 0's
