@@ -41,16 +41,16 @@ TEST_CASE( "Test VALID bitset string construction", "[bitset size N initialized 
     REQUIRE(b.asString() == "1111111"); //shows that set works but changing bit 3 to a 1
 
     //test the reset method 
-    b.reset(0);
-    REQUIRE(b.asString() == "0111111"); //shows that reset works but chaning bit 0 to a 0
+    b.reset(1);
+    REQUIRE(b.asString() == "1011111"); //shows that reset works but chaning bit 1 to a 0
 
     //test the toggle method
-    b.toggle(0);
+    b.toggle(1);
     b.toggle(3);
-    REQUIRE(b.asString() == "1110111"); //shows that toggle works but flipping bits 0 and 3
+    REQUIRE(b.asString() == "1110111"); //shows that toggle works but flipping bits 1 and 3
 
     //test the test method 
-    REQUIRE(b.test(0) == true);
+    REQUIRE(b.test(1) == true);
     REQUIRE(b.test(3) == false);
 
     REQUIRE(b.good()); //calls good method to require the bitset to only contain 1's and 0's
@@ -60,5 +60,5 @@ TEST_CASE( "Test VALID bitset string construction", "[bitset size N initialized 
 TEST_CASE( "Test INVALID bitset string construction", "[bitset size N initialized with string of 1's and 0's]" ) {
     Bitset b("123456789"); //put values here that are NOT binary values 
 
-    REQUIRE_FALSE(b.good()); //calls good method to return boolean value for bitsit (should be invalid here)
+    REQUIRE(!b.good()); //calls good method to return boolean value for bitsit (should be invalid here)
 }

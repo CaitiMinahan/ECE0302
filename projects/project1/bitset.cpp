@@ -84,7 +84,7 @@ void Bitset::reset(intmax_t n){
 void Bitset::toggle(intmax_t n){
     if(n>0 && n<N){ //test if n is in [0, N-1]
        isValid == true; 
-       if(n==1){
+       if(bitset[n]=='1'){
          bitset[n] = '0';} //set the nth bit to 0
         else{
          bitset[n] = '1'; } //set the nth bit to 1
