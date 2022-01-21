@@ -31,7 +31,7 @@ TEST_CASE( "Test INVALID bitset construction", "[bitset size 0]" ) {
 }
 
 //Test case to determine VALID bitset with a string of 1's and 0's
-TEST_CASE( "Test VALID bitset string construction", "[bitset size N initialized with string of 1's and 0's]" ) {
+TEST_CASE( "Test VALID bitset string construction", "[bitset size N initialized with set, reset, toggle, test and asString methods]" ) {
     Bitset b("1110111");
     REQUIRE(b.size() == 7); //test the size method 
     REQUIRE(b.asString() == "1110111"); //test the asString method 
