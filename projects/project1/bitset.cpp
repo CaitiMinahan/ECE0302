@@ -19,10 +19,10 @@ Bitset::Bitset(intmax_t size){
       reset(i);}
     //define scenarios for when bitset is valid or invalid:
     if(N>0){
-        isValid == true; //valid when N>0
+        isValid = true; //valid when N>0
     }
     else{
-        isValid == false; //invalid when N<=0
+        isValid = false; //invalid when N<=0
     }
 }
 
@@ -34,11 +34,11 @@ Bitset::Bitset(const std::string & binary_value){
     //iterate through the entire bitset and test if each character is either a 1 or 0:
     for(int i=0; i<N; i++){
         if(binary_value[i]=='1' || binary_value[i]=='0'){ //match each term of the bitset to either 1 or 0
-            isValid == true;//valid when bitset contains only 1's and 0's
+            isValid = true;//valid when bitset contains only 1's and 0's
             bitset[i] = binary_value[i]; //fill the array with the argument for the binary value you are passing 
         }
         else{ 
-            isValid == false;
+            isValid = false;
             break; //breaks for loop at nth bit when false so that it stops counting 
         } 
     } 
@@ -65,9 +65,9 @@ bool Bitset::good() const{
 void Bitset::set(intmax_t n){
     if(n>0 && n<N){ //test if n is in [0, N-1]:
        bitset[n] = '1'; //set the nth bit to 1
-       isValid == true; }
+       isValid = true; }
     else{
-        isValid == false;}
+        isValid = false;}
 
 }
 
@@ -75,36 +75,36 @@ void Bitset::set(intmax_t n){
 void Bitset::reset(intmax_t n){
     if(n>0 && n<N){ //test if n is in [0, N-1]:
        bitset[n] = '0'; //set the nth bit to 0
-       isValid == true; }
+       isValid = true; }
     else{
-        isValid == false;}
+        isValid = false;}
 }
 
 //Method to toggle the nth bit (mutator)
 void Bitset::toggle(intmax_t n){
     if(n>0 && n<N){ //test if n is in [0, N-1]
-       isValid == true; 
+       isValid = true; 
        if(bitset[n]=='1'){
          bitset[n] = '0';} //set the nth bit to 0
         else{
          bitset[n] = '1'; } //set the nth bit to 1
        }
     else{
-        isValid == false;}
+        isValid = false;}
 }
 
 //Check if the nth bit is set to 1, return T for 1 otherwise return F for 0 (accessor)
 bool Bitset::test(intmax_t n){
     //first, test to see if 
     if(n>0 && n<N){ //test if n is in [0, N-1]
-       isValid == true; 
+       isValid = true; 
        if(n==1){
            return true;} //return bool value of true if nth bit is set to 1
         else{ 
             return false;} //return bool value of false if nth bit is set to 0
         }
     else{
-        isValid == false;
+        isValid = false;
         return false;}
 }
 
