@@ -16,11 +16,11 @@ Bitset::Bitset(){
 //Construction of a valid bitset of size N
 Bitset::Bitset(intmax_t size){
     N = size;
-    bitset = new char [size]; //create your array 
-    
+
     //define scenarios for when bitset is valid or invalid:
     if(N>0){
         isValid = true; //valid when N>0
+        bitset = new char [size]; //create your array 
         //to prevent errors, allocate memory for the bitset only if the size is valid:
         for(int i=0; i<N; i++){ //set all of the bits set to 0 using a for loop
             bitset[i] = '0'; //assign all values in the array to 0's
@@ -28,6 +28,7 @@ Bitset::Bitset(intmax_t size){
         }
     if(N<=0){
         isValid = false; //invalid when N<=0
+        bitset = new char[1]; //create this placeholder array so that the destructor has something to delete 
     }
 }
 
