@@ -11,6 +11,8 @@ Bitset::Bitset(){
   for(int i=0; i<N; i++){ //set all of the bits set to 0 using a for loop
       bitset[i] = '0'; //assign all values in the array to 0's
       }
+
+    isValid = true; //make sure the good() method returns true for the default constructor 
   }
 
 //Construction of a valid bitset of size N
