@@ -6,30 +6,35 @@
 Bitset::Bitset(){
     //construction of valid bitset of size 8, with all bits set to 0  
   N = 8; //set the width to 8 bits
-  bitset = new char [N]; //create new array of chars for bitset -> this way we won't have to convert from another data type 
+  bitset = new char [N]; //new array of chars for bitset -> this way we won't have to convert from another data type 
+  
   for(int i=0; i<N; i++){ //set all of the bits set to 0 using a for loop
-      reset(i);}
+      bitset[i] = '0'; //assign all values in the array to 0's
+      }
   }
 
 //Construction of a valid bitset of size N
 Bitset::Bitset(intmax_t size){
-    bitset = new char [size]; 
     N = size;
-    for(int i=0; i<N; i++){ //set all of the bits set to 0 using a for loop
-      reset(i);}
+    bitset = new char [size]; //create your array 
+    
     //define scenarios for when bitset is valid or invalid:
     if(N>0){
         isValid = true; //valid when N>0
-    }
-    else{
+        //to prevent errors, allocate memory for the bitset only if the size is valid:
+        for(int i=0; i<N; i++){ //set all of the bits set to 0 using a for loop
+            bitset[i] = '0'; //assign all values in the array to 0's
+            }
+        }
+    if(N<=0){
         isValid = false; //invalid when N<=0
     }
 }
 
 //Construction of a valid bitset with a string of 1's and 0's
 Bitset::Bitset(const std::string & binary_value){
-    bitset = new char [N]; 
     N = binary_value.size(); //access the size of the bitset
+    bitset = new char [N]; 
     
     //iterate through the entire bitset and test if each character is either a 1 or 0:
     for(int i=0; i<N; i++){
@@ -98,7 +103,7 @@ bool Bitset::test(intmax_t n){
     //first, test to see if 
     if(n>0 && n<N){ //test if n is in [0, N-1]
        isValid = true; 
-       if(n==1){
+       if(bitset[n]=='1'){ //see if the nth bit is set to 1
            return true;} //return bool value of true if nth bit is set to 1
         else{ 
             return false;} //return bool value of false if nth bit is set to 0

@@ -12,6 +12,8 @@ TEST_CASE( "Test bitset default construction", "[bitset size 8]" ) {
 
     REQUIRE(b.size() == 8); //calls size method to establish valid size of bitset (8 bits long) 
     REQUIRE(b.good()); //calls good method to require the bitset of 8 to be valid (aka good)
+
+    REQUIRE(b.asString() == "00000000"); //call asString method to return string of the appropriate size N
 }
 
 //Test case to determine VALID bitset of size N with all bits set to zero 
@@ -20,14 +22,18 @@ TEST_CASE( "Test VALID bitset construction", "[bitset size N]" ) {
 
     REQUIRE(b.size() == 4);  //Establishes valid bitset size (N bits long)
     REQUIRE(b.good()); //calls good method to return boolean value for bitsit (should be valid here)
+    
+    REQUIRE(b.asString() == "0000"); //call asString method to return string of the appropriate size N
 }
 
-//Test case to determine INVALID bitset of size N=0 with all bits set to zero 
-TEST_CASE( "Test INVALID bitset construction", "[bitset size 0]" ) {
-    Bitset b(0); //input an invalid size for bitset (her N=0)
+//Test case to determine INVALID bitset of size N=-1 
+TEST_CASE( "Test INVALID bitset construction", "[bitset size -1]" ) {
+    Bitset b(-1); //input an invalid size for bitset (where N=-1)
 
-    REQUIRE(b.size() == 0);
-    REQUIRE(!b.good()); //calls good method to return boolean value for bitsit (should be invalid here)
+    REQUIRE(b.size() == -1);
+    REQUIRE(!b.good()); //calls good() method to return boolean value for bitsit (should be invalid here)
+
+    //REQUIRE(b.asString() == ""); //here the bitset should be an empty string since N=0
 }
 
 //Test case to determine VALID bitset with a string of 1's and 0's
