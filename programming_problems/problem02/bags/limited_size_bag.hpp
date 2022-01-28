@@ -20,7 +20,9 @@ public:
   LimitedSizeBag& operator=(LimitedSizeBag& x);
 
   // add an item to the bag
-  bool add(const T & item);
+  bool add(const T & item); //here, we are limited to how many items we can add
+                            //we should first test to see if the bag is completely full or not 
+                            //if it's at max capacity, we can't increase the size of the bag, so the add will be unsuccessful 
   
   // remove an item
   bool remove(const T & item);
@@ -40,9 +42,12 @@ public:
   // check if item is in the bag
   bool contains(const T& item) const;
 
-private:
+  //define max size of bag as a public static constant variable:
+  static const std::size_t maxsize = 100; //this will prevent us from being able to increase the size of the bag 
 
-  // TODO
+private:
+  T * bag; //define your bag array 
+  int numOfItems; //define the number of items in the bag 
 };
 
 #include "limited_size_bag.tpp"
