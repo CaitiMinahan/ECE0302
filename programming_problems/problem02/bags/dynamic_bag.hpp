@@ -55,8 +55,7 @@ public:
 
 private:
   T * bag; //bag array variable 
-  std::size_t maxsize, numOfItems; //max size of the bag and the number of items 
-                           //need two variables b/c the bag isn't always full; may have empty spaces 
+  std::size_t numOfItems; //max size of the bag and the number of items 
 };
 
 #include "dynamic_bag.tpp"
