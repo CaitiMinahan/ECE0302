@@ -25,7 +25,7 @@ TEST_CASE("Test casefor ODD NEGATIVE", "fancy power"){
   REQUIRE(true);
 }
 //test for zero powers
-TEST_CASE("Test case", "fancy power"){
+TEST_CASE("Test case", "fancy power"){  
   REQUIRE(fancy_power(0, 1)==1); 
   REQUIRE(true);
 }

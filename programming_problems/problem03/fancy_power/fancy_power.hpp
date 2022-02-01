@@ -2,12 +2,10 @@
 #define FANCYPOWER_HPP
 
 int fancy_power(int n, int m)
-{
-	//base case: 
+{	//base case: 
 	if(n==0){
 		return 1; //antyhing to the zero power is equal to 1
 	}
-
 	//function calls upon itself 
 	//tests if n is even: 
 	if(n%2==0){
