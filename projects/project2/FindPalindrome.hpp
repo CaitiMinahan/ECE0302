@@ -8,8 +8,10 @@ class FindPalindrome{
 
 private:
 	// private stuff that you define and implement goes here...
-	
-	// ...
+	int size; //size of vector of words/palindromes -- counts the number of elements in vector 
+	int PalinCount; //current count of the number of palindromes
+	std::vector<string> WordVect; //vector of words -- check this for palindromes
+	std::vector<std::vector<string>> PalinVect; //vector of string vectors which contains all the current palindromes 
 	
 	// private stuff that you are given or is specified in the project
 	// description...
@@ -28,6 +30,9 @@ private:
 	  inefficient). You may change the signature of this function. */
 	bool isPalindrome(std::string currentString) const;
 	
+	bool isValid(std::string & value); //additional method to test if we have a valid entry for add methods  	
+											//tests if an entry is valid before adding it to the vector 
+
 public:
 	/** Constructor for the FindPalindrome object. */
 	FindPalindrome();

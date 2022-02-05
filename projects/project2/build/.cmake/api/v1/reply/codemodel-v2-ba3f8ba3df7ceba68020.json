@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "P1",
+					"name" : "P2",
 					"targetIndexes" : 
 					[
 						0,
@@ -39,9 +39,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "bitset-tests::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-bitset-tests-Debug-06fc88fadf21d0b1f651.json",
-					"name" : "bitset-tests",
+					"id" : "FindPalindrome-tests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-FindPalindrome-tests-Debug-e4b2e26397c3447347ae.json",
+					"name" : "FindPalindrome-tests",
 					"projectIndex" : 0
 				},
 				{
@@ -57,12 +57,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/caiti/ECE0302/projects/project1/build",
-		"source" : "/home/caiti/ECE0302/projects/project1"
+		"build" : "/home/caiti/starter-code-ece0302/projects/project2/build",
+		"source" : "/home/caiti/starter-code-ece0302/projects/project2"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 1
+		"minor" : 0
 	}
 }
