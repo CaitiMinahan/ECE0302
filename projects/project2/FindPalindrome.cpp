@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <locale> 
+#include <algorithm>
 #include "FindPalindrome.hpp"
 
 using namespace std;
@@ -38,7 +39,8 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 		std::string candidateString = ""; //declare string for new concatenated candidateString (creds: stackedoverflow)
 		for(int i=0; i<size; i++){ //might want to use c++ notation of vect.size(); !!!
 			//candidateString += candidateStringVector[i];
-			candidateString = Utils::join.(candidateStringVector[i].begin(), candidateStringVector[i].end(), ""); //should concatenate the candidateStringVector into new string variable 
+			//candidateString = Utils::join.(candidateStringVector[i].begin(), candidateStringVector[i].end(), ""); //should concatenate the candidateStringVector into new string variable 
+			candidateString += candidateStringVector[i]; 		
 		}
 	//don't forget to convert every word in the vector to lowercase: 
 	convertToLowerCase(candidateString); 
@@ -46,10 +48,25 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 	//now test candidateString to see if you have a palindrome or not:
 		if(isPalindrome(candidateString)==1){ //If you do have a palindrome in candidateStringVect,
 			PalinCount++; //increase the current count of palindromes found
-			//when implemented, call add vectovect method to add your newfound palindrome to the vect of palindromes 
+			//when implemented, call add vectovect method to add your newfound palindrome to the vect of palindromes
+			return; //this is your end case! :) 
 		}
 	}
-	return;
+	//exit the if loop above since this will be the next step case where currentStringVect ISN'T empty YET!: 
+	//now do the loop shown in class 
+	//	1) here we will remove an element from the currentStringVector and add it to candidateVector 
+	//	2) Then, once we're done adding, we will check if candidateStringVect is a palindrome 
+	//	3) Also, remember we want to return the ORIGINAL candidateStringVect, not the concatenated one
+	for(int i=0; i<size; i++){
+		//remove element from currentStringVect 
+		//candidateStringVector[i] = currentStringVector.remove(currentStringVector.begin()); //removes beginning element of currentStringVect
+																							//and adds it to candidateStringVect 
+																							//creds: c++ notation site 
+		//first remove the element from currentString: 
+		currentStringVector.erase(find(currentStringVector.begin(), currentStringVector.end(), currentStringVector.at(i))); 
+		//now add that element to the candidateStringVect: 
+		candidateStringVector.push_back(currentStringVector.at(i)); 
+	}
 }
 
 // private function to determine if a string is a palindrome (given, you
@@ -116,6 +133,9 @@ bool FindPalindrome::isValid(string & value){
 	//	2) we need to convert the word to all lowercase letters 
 	//	3) we cannot add a duplicate word in the vector
 	//perform these methods and then return true for a valid word entry 
+	
+	//make sure entry is all lowercase letters by calling that method: TEST THIS IN THE TEST CASE FILE TOO 
+	convertToLowerCase(value); //we don't want the entry to be a const string b/c we are changing it here 
 
 	//test if entry is a string of only characters: DO THIS IN THE TEST CASE FILE TOO
 	for(int i=0; i<size; i++){
@@ -123,9 +143,6 @@ bool FindPalindrome::isValid(string & value){
 			return false; //then we can't add this word to our WordVect
 		} 
 	}
-	//make sure entry is all lowercase letters by calling that method: TEST THIS IN THE TEST CASE FILE TOO 
-	convertToLowerCase(value); //we don't want the entry to be a const string b/c we are changing it here 
-
 	//check if the word already exists in the WordVect: WE CANNOT HAVE DUPLICATES!!!
 	for(int i=0; i<size; i++){
 		if(WordVect[i]==value){ //if the current already exists in the WordVect
