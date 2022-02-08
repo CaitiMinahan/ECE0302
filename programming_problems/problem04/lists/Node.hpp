@@ -1,5 +1,7 @@
 #ifndef NODE_
 #define NODE_
+//#include "abstract_list.hpp"
+//#include<iostream>
 
 template<class ItemType>
 class Node

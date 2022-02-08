@@ -1,4 +1,5 @@
 #include "linked_list.hpp"
+#include <iostream>
 
 template <typename T>
 LinkedList<T>::LinkedList()
