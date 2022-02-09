@@ -124,6 +124,7 @@ std::size_t LinkedList<T>::getLength() const noexcept
 {
   //return 0;
   return size; 
+  //return size-1;
 }
 
 template <typename T>
@@ -164,8 +165,8 @@ bool LinkedList<T>::insert(std::size_t position, const T& item)
     }
   //increment item count: 
   size++; 
-  return true; //denote successful insertion 
   }
+  return true; //denote successful insertion 
 }
 
 template <typename T>
@@ -197,10 +198,13 @@ bool LinkedList<T>::remove(std::size_t position)
       prevNodePtr->setNext(newPtr->getNext()); 
     }
     //delete node i: 
-    //first set the node to null: 
+    //first set the node to null:
+    newPtr->setNext(nullptr); 
+    delete newPtr; 
     newPtr = nullptr; 
     //then deallocate:
-    delete newPtr; 
+    //delete newPtr; 
+    size--;
   }  
   return true; //denote successful remove
 }
