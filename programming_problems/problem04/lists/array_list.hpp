@@ -43,12 +43,12 @@ public:
   void setEntry(std::size_t position, const T& newValue);
   
   //define max size of bag as a public static constant variable:
-  static const std::size_t maxsize = 100; //this will prevent us from being able to increase the size of the bag 
+  //static const std::size_t maxsize = 100; //this will prevent us from being able to increase the size of the bag 
 
 private:
   // TODO
   T *ADTlist; //for your ADT array 
-  int size; //for your array size 
+  std::size_t size, maxsize; //for your array size 
 };
 
 #include "array_list.tpp"
