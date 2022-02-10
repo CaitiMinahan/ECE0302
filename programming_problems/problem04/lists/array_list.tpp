@@ -89,6 +89,10 @@ bool ArrayList<T>::insert(std::size_t position, const T& item){
     size++; 
     return true;
     }
+  //make sure we can't insert in an invalid place: 
+  if(position<1 || position>size || position>maxsize){
+    return false; 
+  }
   return false;
 }
 
@@ -110,7 +114,10 @@ bool ArrayList<T>::remove(std::size_t position){
     }
     size--; //now we have one less item in the array
     return true; //denote a SUCCESSFUL REMOVE from the list 
-}
+  //make sure we can't insert in an invalid place: 
+  if(position<1 || position>size || position>maxsize){
+    return false; 
+  }}
 
 template <typename T>
 void ArrayList<T>::clear() {

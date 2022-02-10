@@ -167,7 +167,11 @@ bool LinkedList<T>::insert(std::size_t position, const T& item)
   size++; 
   }
   return true; //denote successful insertion 
-}
+  //make sure we can't insert in an invalid place: 
+  if(position<1 || position>size){
+    return false; 
+    }
+  }
 
 template <typename T>
 bool LinkedList<T>::remove(std::size_t position)
@@ -207,6 +211,10 @@ bool LinkedList<T>::remove(std::size_t position)
     size--;
   }  
   return true; //denote successful remove
+
+  if(position<1 || position>size){
+    return false; 
+    }
 }
 
 template <typename T>
