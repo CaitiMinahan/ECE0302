@@ -29,27 +29,27 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 {
 	// TODO need to implement this recursive function!
 	//take the two vectors, loop through the size of currentStringVector and add words from currentStringVector to candidateStringVector 
-	//individually until currentStringVector is empty (loop through it S times:
+	//individually until currentStringVector is empty:
 
 	//base case: when the candidate vector is empty -- use c++ notation for vectors (creds: geeksforgeeks)
-	if(currentStringVector.empty()){ //once we have added all of the words from currentString to candidateString 
+	if(currentStringVector.empty()==true){ //once we have added all of the words from currentString to candidateString 
 		//then we must make variable -> candidatestring by concatenating our candidateStringVector
 		 
-		//do concatenation here: 
-		std::string candidateString = ""; //declare string for new concatenated candidateString (creds: stackedoverflow)
-		for(int i=0; i<size; i++){ //might want to use c++ notation of vect.size(); !!!
-			//candidateString += candidateStringVector[i];
-			//candidateString = Utils::join.(candidateStringVector[i].begin(), candidateStringVector[i].end(), ""); //should concatenate the candidateStringVector into new string variable 
-			candidateString += candidateStringVector[i]; 		
+		//temporary variables:  
+		std::string candidateString;
+		std::string candidatestring_lower; 
+		for(int i=0; i<candidateStringVector.size(); i++){ 
+			candidateString = candidateStringVector.at(i); 
+			convertToLowerCase(candidateString); //don't forget to convert every word in the vector to lowercase: 
+			candidatestring_lower += candidateString; //concatenate onto the lowercase version 
 		}
-	//don't forget to convert every word in the vector to lowercase: 
-	convertToLowerCase(candidateString); 
 
 	//now test candidateString to see if you have a palindrome or not:
-		if(isPalindrome(candidateString)==1){ //If you do have a palindrome in candidateStringVect,
+	//test the lowercase version of your candidate string
+		if(isPalindrome(candidatestring_lower)==1){ //If you do have a palindrome in candidateStringVect,
+			PalinVect.push_back(candidateStringVector); //add original version of string to the palindrome vector 
 			PalinCount++; //increase the current count of palindromes found
-			//when implemented, call add vectovect method to add your newfound palindrome to the vect of palindromes
-			return; //this is your end case! :) 
+			return; //this is your end case!
 		}
 	}
 	//exit the if loop above since this will be the next step case where currentStringVect ISN'T empty YET!: 
@@ -57,15 +57,15 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 	//	1) here we will remove an element from the currentStringVector and add it to candidateVector 
 	//	2) Then, once we're done adding, we will check if candidateStringVect is a palindrome 
 	//	3) Also, remember we want to return the ORIGINAL candidateStringVect, not the concatenated one
-	for(int i=0; i<size; i++){
-		//remove element from currentStringVect 
-		//candidateStringVector[i] = currentStringVector.remove(currentStringVector.begin()); //removes beginning element of currentStringVect
-																							//and adds it to candidateStringVect 
-																							//creds: c++ notation site 
+	for(int i=0; i<currentStringVector.size(); i++){
 		//first remove the element from currentString: 
 		currentStringVector.erase(find(currentStringVector.begin(), currentStringVector.end(), currentStringVector.at(i))); 
 		//now add that element to the candidateStringVect: 
 		candidateStringVector.push_back(currentStringVector.at(i)); 
+
+		//call cut test 2: 
+		if(!cutTest2(candidateStringVector, currentStringVector)) continue;
+		recursiveFindPalindromes(candidateStringVector, currentStringVector); 
 	}
 }
 
@@ -95,6 +95,8 @@ FindPalindrome::FindPalindrome()
 }
 
 FindPalindrome::~FindPalindrome(){ //don't need to write anything b/c we aren't dealing with arrays or pointers
+	//include the clear() method just to be safe: 
+	clear(); 
 }
 
 int FindPalindrome::number() const
@@ -108,6 +110,9 @@ void FindPalindrome::clear()
 	//delete all words from the string vector and reset the size and PalinCount variables: 
 	size = 0; 
 	PalinCount = 0; 
+	//also clear both vectors: 
+	WordVect.clear(); 
+	PalinVect.clear(); 
 }
 
 bool FindPalindrome::cutTest1(const vector<string> & stringVector)
@@ -124,6 +129,7 @@ bool FindPalindrome::cutTest1(const vector<string> & stringVector)
 
 	//create ABC position array (freq of letters in string): 
 	int ABC[26]; //contains all letters in ABCs 
+
 	//initialize ABC vector to be empty before comparing memory: 
 	for(int i=0; i<26; i++){
 		ABC[i] = 0; //need to do this so we don't get a seg fault 
@@ -132,11 +138,11 @@ bool FindPalindrome::cutTest1(const vector<string> & stringVector)
 	int freq = 0; 
 
 	//check if stringVector is empty: 
-	if(stringVector.size()==0){ 
+	if(stringVector.empty()==1){ 
 		return false; //we can't check an empty vector
 	}
-	//declare new string var for concatenation: 
-	std::string stringVect; 
+	//otherwise, make sure we are within limits of the vector: 
+	std::string stringVect; //declare new string var for concatenation: 
 	for(int i=0; i<stringVector.size(); i++){ 
 		stringVect += stringVector[i]; //concatenate
 	}
@@ -156,44 +162,45 @@ bool FindPalindrome::cutTest1(const vector<string> & stringVector)
 		//subtract 97 to get distance from beginning of ABC 
 	}
 	//if length is odd: 
-	char middle; 
+	//char middle; 
 	if(stringvect.size()%2!=0){
-		//if we have an odd length, then center char appears odd # times 
-		//other chars appear even # times 
-		middle = stringvect[(stringvect.size()/2)+1]; 
+		// //if we have an odd length, then center char appears odd # times 
+		// //other chars appear even # times 
+		// middle = stringvect[(stringvect.size()/2)+1]; 
 
-		//now see if freq of middle character occurs odd # times 
-		if(ABC[middle-97]%2!=0){ //if freq of that letter is odd
-			freq++; //increase the var for counting odd # of chars
-		}
+		// //now see if freq of middle character occurs odd # times 
+		// if(ABC[middle-97]%2!=0){ //if freq of that letter is odd
+		// 	freq++; //increase the var for counting odd # of chars
+		// }
 		//make sure the other chars appear an even number of times: 
 		for(int i=0; i<26; i++){
 			if(ABC[i]%2!=0){
 				freq++; //the other characters appear an even number of times
 			}
 		}
-		if(freq<=2){
-			return true; //make sure the max # of odd letters can be two 
-		}
-		else{ 
-			return false;
-		}
+		// if(freq<=2){
+		// 	return true; //make sure the max # of odd letters can be two 
+		// }
+		return true; //means it occurs an odd number of times 
+		// else{ 
+		// 	return false;
+		// }
 	}
 	//if palindrome is of even length, the count of each character must be even 
-	if((stringvect.size())%2==0){ 
-		for(int i=0; i<26; i++){
-			if(ABC[i]%2!=0){
-				freq++; //the other characters appear an even number of times
-			}
-		}
-		if(freq==0){
-			return true; //cannot have odd occurances -- even for even 
-		}
-		else{ 
-			return false;
-		}
-	}
-	//return false;
+	// if((stringvect.size())%2==0){ 
+	// 	for(int i=0; i<26; i++){
+	// 		if(ABC[i]%2!=0){
+	// 			freq++; //the other characters appear an even number of times
+	// 		}
+	// 	}
+	// 	if(freq==0){
+	// 		return true; //cannot have odd occurances -- even for even 
+	// 	}
+	// 	else{ 
+	// 		return false;
+	// 	}
+	// }
+	return false; //otherwise return false 
 }
 
 bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
@@ -211,10 +218,17 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 	//ABC array for lower half 
 	int ABC_lower[26]; 
 
+	//initialize ABC vector to be empty before comparing memory: 
+	for(int i=0; i<26; i++){
+		ABC_upper[i] = 0; //need to do this so we don't get a seg fault
+		ABC_lower[i] = 0; 
+	}
+
 	//make sure neither stringVector1 nor stringVector2 are empty: 
-	if(stringVector1.size()==0 || stringVector2.size()==0){
+	if(stringVector1.empty()==1 || stringVector2.empty()==1){
 		return false;
 	}
+	else if(!stringVector1.empty() && !stringVector2.empty()){ //otherwise, if the strings are not empty 
 	//convert and concatenate stringVector1 and stringVector2: 
 	std::string strVector1; 
 	std::string strVector2; 
@@ -234,7 +248,7 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 	//compare sizes of vectors and set the upper and lower halves: 
 	std::string upperhalf; 
 	std::string lowerhalf; 
-	if(strVect1<strVect2){
+	if(strVect1.size()<strVect2.size()){
 		lowerhalf = strVect1; //set the lower half 
 		upperhalf = strVect2; //set the upper half
 	}
@@ -254,12 +268,13 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 	}
 	//make sure freq of chars in both halves are equal: 
 	for(int i=0; i<26; i++){ 
-		if(ABC_lower[i]<ABC_upper[i]){
+		if(ABC_lower[i]>ABC_upper[i]){
 			return false; 
+			}
 		}
-		//return true; 
+		return true; //means both of the halves match 
 	}
-	return true; //means both of the halves match 
+	return false; 
 }
 
 //add the isValid method, tests if the word we are adding is a valid entry 
@@ -282,11 +297,9 @@ bool FindPalindrome::isValid(string & value){
 		if(value[i]<'a' || value[i]>'z'){ //if any of the letters of the entry cannot be found in the ABCs
 			return false; //then we can't add this word to our WordVect
 		} 
+	//return true;
 	}
-	// for(int i=0; WordVect.size(); i++){
-	// 	if(entry == convertToLowerCase(WordVect[i])){
-	// 		return false;
-	// 	}
+	return true; 
 }
 
 bool FindPalindrome::add(const string & value)
@@ -300,14 +313,24 @@ bool FindPalindrome::add(const string & value)
 	//make a new variable for value since we need to call the isValid method: 
 	std::string entry = value; 
 	convertToLowerCase(entry); 
+	std::vector<std::string> AddWordVect; //temporary vector for the recursive function 
 
-	std::vector<string> AddWordVect; //temporary vector for the recursive function 
 	if(isValid(entry)==true){
 		//a successful add would be the size of the word vector is incremented:
 		//AddWordVect = WordVect.push_back(entry); //add the new string to the end of the word vector 
-		WordVect.push_back(entry); 
-		size++; 
+		for(int i=0; i<WordVect.size(); i++){
+		AddWordVect.push_back(WordVect[i]); 
+		convertToLowerCase(AddWordVect[i]); 
+		}
 	}	
+	for(int i=0; i<WordVect.size(); i++){
+		if(entry==AddWordVect[i]){
+			return false; //cannot add if the value already exists in the word vector 
+		}
+	}
+	//otherwise, we are good to add our value to the wordvect: 
+	WordVect.push_back(value); 
+
 	//run cut test 1: 
 	if(cutTest1(WordVect)==1){
 		//call the recrusive findPalin method 
@@ -339,32 +362,34 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 	convertToLowerCase(strvector); 
 	
 	std::vector<string> AddVect; //temporary vector for the recursive function 
-	if(isValid(strvector)==true){
+	if(isValid(strvector)==1){
 		for(int i=0; i<WordVect.size(); i++){ 
 			AddVect.push_back(WordVect[i]); 
 			//convert all the elements to be lowercase: 
 			convertToLowerCase(AddVect[i]); 
-	  }
+	  	}
 		//make sure this vector doesn't already exist: 
-		for(int i=0; WordVect.size(); i++){
-			if(strvector == AddVect[i]){
+		for(int i=0; i<PalinVect.size(); i++){
+			if(strVector == AddVect[i]){
 				return false;
 			}
 		}
 	}
 	//delcare temporary vector for recursive method: 
-	std::vector<string> AddVect; 
+	std::vector<string> temp; 
 	//run cut test 1: 
 	if(cutTest1(WordVect)==1){
+		PalinVect.clear(); 
 		//call the recrusive findPalin method 		
-		recursiveFindPalindromes(AddVect, WordVect);
+		recursiveFindPalindromes(temp, WordVect);
 	}
 	return true; 
 }
 
 vector< vector<string> > FindPalindrome::toVector() const
 {	//returns the vector which collects all of the palindromes found from methods above 
-	vector<vector<string>> returnThingie;
-	return returnThingie;
+	// vector<vector<string>> returnThingie;
+	// return returnThingie;
+	return PalinVect; 
 }
 
