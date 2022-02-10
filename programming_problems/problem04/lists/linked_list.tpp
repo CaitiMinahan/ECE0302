@@ -232,7 +232,7 @@ T LinkedList<T>::getEntry(std::size_t position) const
 template <typename T>
 void LinkedList<T>::setEntry(std::size_t position, const T& newValue)
 {
-  if(position>=1 && position <= size){
+  if(position>=1 && position <= size+1){
     Node<T>* newPtr = new Node<T>(newValue); 
     if(position==1){
       newPtr->setNext(headptr); 
@@ -245,6 +245,6 @@ void LinkedList<T>::setEntry(std::size_t position, const T& newValue)
       prevNodePtr->setNext(newPtr); 
     }
   //incremenet item count:
-  size++; 
+  //size++; 
   }
 }

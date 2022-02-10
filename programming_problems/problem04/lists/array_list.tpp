@@ -138,7 +138,7 @@ void ArrayList<T>::setEntry(std::size_t position, const T& newValue) {
     for(int i=size; i>=position; i--){  //shift everything down that was affected by the insertion:
       ADTlist[i+1] = ADTlist[i]; //shifting down by one 
       ADTlist[position]=newValue; //insert your new value
-      size++; //adjust your number of items
+      //size++; //adjust your number of items
     }
   }
 }
