@@ -314,7 +314,9 @@ bool FindPalindrome::add(const string & value)
 	std::string entry = value; 
 	convertToLowerCase(entry); 
 	std::vector<std::string> AddWordVect; //temporary vector for the recursive function 
-
+	if(isValid(entry)==false){
+		return false; 
+	}
 	if(isValid(entry)==true){
 		//a successful add would be the size of the word vector is incremented:
 		//AddWordVect = WordVect.push_back(entry); //add the new string to the end of the word vector 
@@ -335,8 +337,9 @@ bool FindPalindrome::add(const string & value)
 	if(cutTest1(WordVect)==1){
 		//call the recrusive findPalin method 
 		//clear the palindrome vector: 
-		PalinVect.clear(); 		
-		recursiveFindPalindromes(AddWordVect, WordVect);
+		PalinVect.clear(); 	
+		std::vector<std::string> emptyTemp; 	
+		recursiveFindPalindromes(emptyTemp, WordVect);
 	}
 	return true; 
 }
@@ -360,7 +363,10 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 	std::string strvector; 
 	strvector = strVector; 
 	convertToLowerCase(strvector); 
-	
+
+	if(isValid(strvector)==false){
+		return false; 
+	}
 	std::vector<string> AddVect; //temporary vector for the recursive function 
 	if(isValid(strvector)==1){
 		for(int i=0; i<WordVect.size(); i++){ 
@@ -368,13 +374,16 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 			//convert all the elements to be lowercase: 
 			convertToLowerCase(AddVect[i]); 
 	  	}
-		//make sure this vector doesn't already exist: 
-		for(int i=0; i<PalinVect.size(); i++){
-			if(strVector == AddVect[i]){
-				return false;
-			}
+	}
+	//make sure this vector doesn't already exist: 
+	for(int i=0; i<PalinVect.size(); i++){
+		if(strVector == AddVect[i]){
+			return false;
 		}
 	}
+
+	PalinVect.push_back(stringVector); 
+	
 	//delcare temporary vector for recursive method: 
 	std::vector<string> temp; 
 	//run cut test 1: 
