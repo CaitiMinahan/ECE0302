@@ -12,19 +12,50 @@ TEST_CASE( "Test FindPalindrome add a non-allowable word", "[FindPalindrome]" )
 	FindPalindrome b;
 	REQUIRE(!b.add("kayak1"));
 }
-//test add for invalid input to PalinVect
-TEST_CASE( "Test FindPalindrome add a non-allowable vector", "[FindPalindrome]" ){
-	INFO("Hint: add a single non-allowable vector");
-	// FindPalindrome b_current; //wordVect for currentString
-	// REQUIRE(b_current.add("Caiti")); //add your first word to b
-	// REQUIRE(b_current.add("Minahan"));
-	// FindPalindrome b_candid; //empty string for candidateString
-	// recursiveFindPalindromes(b_candid, b_current); //call recursive function on your vectors of strings
-	FindPalindrome bVect; //palinVect
-	REQUIRE(!bVect.add("CaitiMinahan")); 
+//Testing number of possible sentence palindromes for N words in the wordVect:
+TEST_CASE( "Tests add(string), number(), toVector() and clear() methods", "[FindPalindrome]" ){
+	//remember, the number of palindromes for N unique words is N! 
+	INFO("This adds strings 'a' 'AA' and 'AaA' to make sure we get N! palindromes");
+	FindPalindrome b; 
+	REQUIRE(b.add("a")==true); 
+	REQUIRE(b.add("AA")==true); 
+	REQUIRE(b.add("AaA")==true); 
+
+	//find the number of sentence palindromes by calling the number() method: 
+	//here, the number of sentence palindromes = N! = 3!
+	REQUIRE(b.number()==6); 
+
+	//now, return the PlainVect which contains all sentence palindromes: 
+	std::vector<std::vector<std::string>> p; //vector of string vectors to be returned from the toVector() method
+	p = b.toVector(); 
+	
+	//ensure the # palindromes (palinCount) = N! = number(): 
+	REQUIRE(p.size()==6); //the size of the palinVect is the # of sentence palindromes = number() = N! = 3! = 6
+
+	//now let's continue to test the number() method by testing the clear() method: 
+	b.clear(); 
+	REQUIRE(b.number()==0); 
+	REQUIRE(p.size()==0); 
 }
-//test cutTest1
+//test recursive and isApalindrome methods for valid inputs: 
+// TEST_CASE( "Tests add(string) method", "[FindPalindrome]" ){ 
+// 	INFO("This will create a valid palindrome with valid strings")
+// }
 
-//test cutTest2 
+// //test cutTest1
+// TEST_CASE( "Tests cut test 1", "[FindPalindrome]" ){ 
+// 	//to do this, let's first create a valid palindrome and run cut test 1 on it 
+// 	INFO("Use valid strings from before")
+// 	//then, create an invalid palindrome and run cut test 1 on it and make sure it fails
+// 	INFO("Use invalid word here by having a character repeat more than an odd # of times")
+// }
 
-//test recursive and isApalindrome methods for valid inputs 
+// //test cutTest2 
+// TEST_CASE( "Tests cut test 2", "[FindPalindrome]" ){
+// 	//to do this, let's first create a valid palindrome and run cut test 2 on it 
+// 	INFO("Use valid strings from before")
+// 	//then, create an invalid palindrome and run cut test 2 on it and make sure it fails
+// 	INFO("Use invalid word here by having the halves of the palindrome not be equal")
+//  }
+
+//NOTE: cut tests 1 and 2 call upon the recursiveFindPalindromes which also calls upon isPalindrome so these let us test all methods in less steps

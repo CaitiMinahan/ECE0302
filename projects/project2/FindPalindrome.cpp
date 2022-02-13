@@ -46,7 +46,7 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 
 	//now test candidateString to see if you have a palindrome or not:
 	//test the lowercase version of your candidate string
-		if(isPalindrome(candidatestring_lower)==1){ //If you do have a palindrome in candidateStringVect,
+		if(isPalindrome(candidatestring_lower)==true){ //If you do have a palindrome in candidateStringVect,
 			PalinVect.push_back(candidateStringVector); //add original version of string to the palindrome vector 
 			PalinCount++; //increase the current count of palindromes found
 			return; //this is your end case!
@@ -306,7 +306,7 @@ bool FindPalindrome::add(const string & value)
 {	//before we add our word entry, let's make sure it is a valid entry: 
 	
 	//reset these before adding to the vector 
-	WordVect.clear(); //if cut test passes, clear vect of strings 
+	PalinVect.clear(); //if cut test passes, clear vect of strings 
 	//size = 0; 
 	PalinCount = 0; 
 
