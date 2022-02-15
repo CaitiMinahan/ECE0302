@@ -5,6 +5,10 @@ using std::string;
 
 #include <cctype> // for isalpha
 
+#include <vector>
+
+#include <stack> //include the stack header 
+
 #include "algebraic_expressions.hpp"
 
 bool isoperator(char ch) {
@@ -41,8 +45,38 @@ bool isPost(string s) {
   return (firstChar == 0);
 }
 
-void convert(string &postfix, string &prefix) {
+void convert(string &postfix, string &prefix) { //convert from postfix to prefix 
+  //do input validation for that argument is purely symbolic (no numbers)!
+  //if(argument does not contain symbols from the alphabet){error}
+  //verify postfix is a valid postfix expression: 
+  if(isPost(postfix)){ //if postfix string is valid, 
+  //let's say we have potsfix expression: ab+
+  //use pop_back() to take last element and push it to the postfix string (push_back())
+  //we can use back() as a reference to the last element of either string 
+    std::stack<string> s; 
+    //std::vector<string> stack; 
+    //int length = postfix.size(); //size of postfix string 
 
-  // TODO
-  
+    for(int i=0; i<postfix.size(); i++){
+    //if the symbol is an operator, then pop two operands from the stack
+    if(isoperator(postfix[i])){
+      string operand1 = s.top(); 
+      s.pop(); //obstain value from top of stack -- pop it 
+      string operand2 = s.top(); 
+      s.pop(); 
+
+      //concatenate the operands and the operator: 
+      string temp = postfix[i] + operand2 + operand1; //should look like: operator|operand2|operand1
+
+      //push string temp to the stack: 
+      s.push(temp);
+    }
+    //if the symbol is an operand, then push it to the stack 
+    else{
+      //push the operand to the stack: 
+      s.push(string(1, postfix[i])); 
+    }
+    //repeat until the end of postfix expression 
+    }
+  }
 }

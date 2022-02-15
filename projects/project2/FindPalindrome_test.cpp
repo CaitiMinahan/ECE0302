@@ -2,6 +2,9 @@
 #define CATCH_CONFIG_COLOUR_NONE
 #include "catch.hpp"
 #include "FindPalindrome.hpp"
+#include <iostream>
+
+//using namespace std; 
 
 // There should be at least one test per FindPalindrome method
 
@@ -17,9 +20,10 @@ TEST_CASE( "Tests add(string), number(), toVector() and clear() methods", "[Find
 	//remember, the number of palindromes for N unique words is N! 
 	INFO("This adds strings 'a' 'AA' and 'AaA' to make sure we get N! palindromes");
 	FindPalindrome b; 
-	REQUIRE(b.add("a")==true); 
-	REQUIRE(b.add("AA")==true); 
-	REQUIRE(b.add("AaA")==true); 
+	//std::cout << "b"; 
+	REQUIRE(b.add("a")); 
+	REQUIRE(b.add("AA")); 
+	REQUIRE(b.add("AaA")); 
 
 	//find the number of sentence palindromes by calling the number() method: 
 	//here, the number of sentence palindromes = N! = 3!
