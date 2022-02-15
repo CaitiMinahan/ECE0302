@@ -54,9 +54,7 @@ void convert(string &postfix, string &prefix) { //convert from postfix to prefix
   //use pop_back() to take last element and push it to the postfix string (push_back())
   //we can use back() as a reference to the last element of either string 
     std::stack<string> s; 
-    //std::vector<string> stack; 
-    //int length = postfix.size(); //size of postfix string 
-
+    
     for(int i=0; i<postfix.size(); i++){
     //if the symbol is an operator, then pop two operands from the stack
     if(isoperator(postfix[i])){
@@ -66,15 +64,15 @@ void convert(string &postfix, string &prefix) { //convert from postfix to prefix
       s.pop(); 
 
       //concatenate the operands and the operator: 
-      string temp = postfix[i] + operand2 + operand1; //should look like: operator|operand2|operand1
-
+      prefix = postfix[i] + operand2 + operand1; //should look like: operator|operand2|operand1
+      
       //push string temp to the stack: 
-      s.push(temp);
+      s.push(prefix);
     }
     //if the symbol is an operand, then push it to the stack 
     else{
       //push the operand to the stack: 
-      s.push(string(1, postfix[i])); 
+      s.push(string(1, postfix[i])); //loop back up to the next index of postfix string 
     }
     //repeat until the end of postfix expression 
     }
