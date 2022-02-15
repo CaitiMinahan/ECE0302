@@ -26,46 +26,38 @@ static void convertToLowerCase(string & value)
 // private recursive function. Must use this signature!
 void FindPalindrome::recursiveFindPalindromes(vector<string>
         candidateStringVector, vector<string> currentStringVector)
-{
-	// TODO need to implement this recursive function!
-	//take the two vectors, loop through the size of currentStringVector and add words from currentStringVector to candidateStringVector 
+{	//take the two vectors, loop through the size of currentStringVector and add words from currentStringVector to candidateStringVector 
 	//individually until currentStringVector is empty:
 
 	//base case: when the candidate vector is empty -- use c++ notation for vectors (creds: geeksforgeeks)
-	if(currentStringVector.empty()==true){ //once we have added all of the words from currentString to candidateString 
-		//then we must make variable -> candidatestring by concatenating our candidateStringVector
-		 
+	if(currentStringVector.empty()){ //once we have added all of the words from currentString to candidateString 		 
 		//temporary variables:  
 		std::string candidateString;
 		std::string candidatestring_lower; 
 		for(int i=0; i<candidateStringVector.size(); i++){ 
-			candidateString = candidateStringVector.at(i); 
-			convertToLowerCase(candidateString); //don't forget to convert every word in the vector to lowercase: 
+			candidateString = candidateStringVector[i]; //copy values from the candidateStringVector into new string
+			convertToLowerCase(candidateString); //convert everything in new string to be lowercase  
 			candidatestring_lower += candidateString; //concatenate onto the lowercase version 
 		}
-
-	//now test candidateString to see if you have a palindrome or not:
-	//test the lowercase version of your candidate string
-		if(isPalindrome(candidatestring_lower)==true){ //If you do have a palindrome in candidateStringVect,
+		//test if lowercase candidate string is a vector:
+		if(isPalindrome(candidatestring_lower)){ //If you do have a palindrome in candidateStringVect,
 			PalinVect.push_back(candidateStringVector); //add original version of string to the palindrome vector 
 			PalinCount++; //increase the current count of palindromes found
 			return; //this is your end case!
 		}
 	}
-	//exit the if loop above since this will be the next step case where currentStringVect ISN'T empty YET!: 
-	//now do the loop shown in class 
+	//otherwise, if the currentStringVector isn't empty, do the recursion:
 	//	1) here we will remove an element from the currentStringVector and add it to candidateVector 
 	//	2) Then, once we're done adding, we will check if candidateStringVect is a palindrome 
 	//	3) Also, remember we want to return the ORIGINAL candidateStringVect, not the concatenated one
 	for(int i=0; i<currentStringVector.size(); i++){
 		//first remove the element from currentString: 
-		currentStringVector.erase(find(currentStringVector.begin(), currentStringVector.end(), currentStringVector.at(i))); 
-		//now add that element to the candidateStringVect: 
-		candidateStringVector.push_back(currentStringVector.at(i)); 
+		currentStringVector.erase(find(currentStringVector.begin(), currentStringVector.end(), currentStringVector.at(i))); //remove element at index (i)
+		candidateStringVector.push_back(currentStringVector.at(i)); //now add that element to the candidateStringVect: 
 
 		//call cut test 2: 
-		if(!cutTest2(candidateStringVector, currentStringVector)) continue;
-		recursiveFindPalindromes(candidateStringVector, currentStringVector); 
+		if(!cutTest2(candidateStringVector, currentStringVector)) continue; //if cutTest2 fails, continue 
+		recursiveFindPalindromes(candidateStringVector, currentStringVector); //test if candidate is a plaindrome 
 	}
 }
 // private function to determine if a string is a palindrome (given, you
@@ -215,12 +207,11 @@ bool FindPalindrome::isValid(string & value){
 	
 	//make sure entry is all lowercase letters by calling that method: TEST THIS IN THE TEST CASE FILE TOO 
 	std::string entry = value; 
-	//entry = value; 
 	convertToLowerCase(entry); //we don't want the entry to be a const string b/c we are changing it here 
 
 	//test if entry is a string of only characters:
-	for(int i=0; i<entry.size(); i++){
-		if(value[i]<'a' || value[i]>'z'){ //if any of the letters of the entry cannot be found in the ABCs
+	for(int i=0; i<value.length(); i++){
+		if(entry[i]<'a' || entry[i]>'z'){ //if any of the letters of the entry cannot be found in the ABCs
 			return false; //then we can't add this word to our WordVect
 		} 
 	//return true;
@@ -240,30 +231,29 @@ bool FindPalindrome::add(const string & value)
 	std::string entry = value; 
 	convertToLowerCase(entry); 
 	std::vector<std::string> AddWordVect; //temporary vector for the recursive function 
-	cout << "b"; 
-	if(isValid(entry)==false){
-		return false; 
+	//cout << "b"; 
+	if(!isValid(entry)){
+		cout << "b"; //this is where it's failing
+		return false; //do not add an invalid input 
 	}
-	cout << "b"; 
+	//otherwise, if the i/p is valid, add lowercase i/p to the temp vector
+	for(int i=0; i<WordVect.size(); i++){
+		AddWordVect.push_back(WordVect[i]); //add valid string i/p to the temporary vector 
+		convertToLowerCase(AddWordVect[i]); //convert everything in vector to lowercase 
+	}
+	//cout << "b"; 
+	//make sure string doesn't already exist in the vector:
 	for(int i=0; i<WordVect.size(); i++){
 		if(entry==AddWordVect[i]){
 			return false; //cannot add if the value already exists in the word vector 
 		}
-	}	
-	if(isValid(entry)==true){
-		//a successful add would be the size of the word vector is incremented:
-		//AddWordVect = WordVect.push_back(entry); //add the new string to the end of the word vector 
-		for(int i=0; i<WordVect.size(); i++){
-		AddWordVect.push_back(WordVect[i]); 
-		convertToLowerCase(AddWordVect[i]); 
-		}
-	}
-	cout << "b"; 	
+	}		
+	//cout << "b"; 	
 	//otherwise, we are good to add our value to the wordvect: 
-	WordVect.push_back(value); 
+	WordVect.push_back(value); //adds original version of the string i/p to your wordVect
 
 	//run cut test 1: 
-	if(cutTest1(WordVect)==1){
+	if(cutTest1(WordVect)){
 		//call the recrusive findPalin method 
 		//clear the palindrome vector: 
 		PalinVect.clear(); 	
@@ -291,17 +281,16 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 	}
 	std::string strvector; 
 	strvector = strVector; 
-	convertToLowerCase(strvector); 
+	convertToLowerCase(strvector); //lowercase version of strVector
 
-	if(isValid(strvector)==false){
+	if(!isValid(strvector)){
 		return false; 
 	}
 	std::vector<string> AddVect; //temporary vector for the recursive function 
-	if(isValid(strvector)==1){
+	if(isValid(strvector)){
 		for(int i=0; i<WordVect.size(); i++){ 
 			AddVect.push_back(WordVect[i]); 
-			//convert all the elements to be lowercase: 
-			convertToLowerCase(AddVect[i]); 
+			convertToLowerCase(AddVect[i]); //add the string vectors to AddVect and convert everything to lowercase 
 	  	}
 	}
 	//make sure this vector doesn't already exist: 
@@ -314,10 +303,10 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 	PalinVect.push_back(stringVector); 
 	
 	//delcare temporary vector for recursive method: 
-	std::vector<string> temp; 
 	//run cut test 1: 
 	if(cutTest1(WordVect)==1){
 		PalinVect.clear(); 
+		std::vector<string> temp; 
 		//call the recrusive findPalin method 		
 		recursiveFindPalindromes(temp, WordVect);
 	}
