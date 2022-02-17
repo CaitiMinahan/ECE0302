@@ -123,6 +123,7 @@ bool FindPalindrome::cutTest1(const vector<string> & stringVector)
 	for(int i=0; i<stringVector.size(); i++){ 
 		stringVect += stringVector[i]; //concatenate
 	}
+	cout << "b5"; 
 	//convert string to all lowercase:
 	std::string stringvect; 
 	stringvect = stringVect;
@@ -133,14 +134,18 @@ bool FindPalindrome::cutTest1(const vector<string> & stringVector)
 		if(std::count(stringvect.begin(), stringvect.end(), stringvect[i])%2!=0){ //if odd
 			char freq = stringvect[i]; //found the character that appears an odd # times 
 			stringvect.erase(remove(stringvect.begin(), stringvect.end(), freq), stringvect.end()); //erase that character
+			cout << "b11"; //this is where it's failing 
 			break; 
 		}
 	}
+	cout << "b6"; 
 	for(int i=0; i<stringvect.size(); i++){
 		if(std::count(stringvect.begin(), stringvect.end(), stringvect[i])%2!=0){ //if odd
 			return false; //return false because this cannot happen again 
+			cout << "b10"; 
 		}
 	}
+	cout << "b7"; 
 	return true; 
 }
 
@@ -233,7 +238,7 @@ bool FindPalindrome::add(const string & value)
 	std::vector<std::string> AddWordVect; //temporary vector for the recursive function 
 	//cout << "b"; 
 	if(!isValid(entry)){
-		cout << "b"; //this is where it's failing
+		cout << "b1"; //this is where it's failing
 		return false; //do not add an invalid input 
 	}
 	//otherwise, if the i/p is valid, add lowercase i/p to the temp vector
@@ -241,14 +246,17 @@ bool FindPalindrome::add(const string & value)
 		AddWordVect.push_back(WordVect[i]); //add valid string i/p to the temporary vector 
 		convertToLowerCase(AddWordVect[i]); //convert everything in vector to lowercase 
 	}
+	cout << "b2"; 
 	//cout << "b"; 
 	//make sure string doesn't already exist in the vector:
 	for(int i=0; i<WordVect.size(); i++){
 		if(entry==AddWordVect[i]){
+			cout << "b3"; 
+			cout << AddWordVect[i]; 
 			return false; //cannot add if the value already exists in the word vector 
 		}
 	}		
-	//cout << "b"; 	
+	cout << "b4"; 	
 	//otherwise, we are good to add our value to the wordvect: 
 	WordVect.push_back(value); //adds original version of the string i/p to your wordVect
 
@@ -258,8 +266,10 @@ bool FindPalindrome::add(const string & value)
 		//clear the palindrome vector: 
 		PalinVect.clear(); 	
 		std::vector<std::string> emptyTemp; 	
-		recursiveFindPalindromes(emptyTemp, WordVect);
+		//recursiveFindPalindromes(emptyTemp, WordVect);
+		cout << "b9"; //failing at cut test1
 	}
+	cout << "b0"; //doesn't print out b0 so it isn't returning true 
 	return true; 
 }
 
@@ -308,7 +318,7 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 		PalinVect.clear(); 
 		std::vector<string> temp; 
 		//call the recrusive findPalin method 		
-		recursiveFindPalindromes(temp, WordVect);
+		//recursiveFindPalindromes(temp, WordVect);
 	}
 	return true; 
 }
