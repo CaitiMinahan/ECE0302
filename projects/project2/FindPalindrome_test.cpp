@@ -50,6 +50,8 @@ TEST_CASE("Tests the add string and add vector functionality, [FindPalindrome]")
 	REQUIRE(b.add("AA")); 
 	REQUIRE(b.add("AaA")); 
 
+	REQUIRE(b.number()==6); 
+
 	//add invalid words: 
 	REQUIRE(!b.add("What's up")); 
 	REQUIRE(!b.add("sk8rboy")); 
@@ -64,6 +66,8 @@ TEST_CASE("Tests the add string and add vector functionality, [FindPalindrome]")
 	REQUIRE(b1.add("b")); 
 	REQUIRE(b1.add("BB")); 
 	REQUIRE(b1.add("BbB")); 
+
+	REQUIRE(b1.number()==6); 
 
 	//add invalid words: 
 	REQUIRE(!b1.add("doesn't")); 
@@ -80,6 +84,12 @@ TEST_CASE("Tests the add string and add vector functionality, [FindPalindrome]")
 	p.push_back("taco"); //add string vectors to the palinvect 
 	p.push_back("cat"); 
 	REQUIRE(b2.add(p)); 
+	REQUIRE(p.size()==2); 
+
+	//don't add duplicates
+	p.push_back("taco"); 
+	//p.push_back("TACO"); 
+	REQUIRE(!b2.add(p)); 
 }
 TEST_CASE("Cut test 1 [FindPalindrome]"){
 	//run cut test 1 with a valid string vector 
@@ -87,7 +97,6 @@ TEST_CASE("Cut test 1 [FindPalindrome]"){
 	std::vector<std::string> p; //vector of string vectors to be returned from the toVector() method
 	p.push_back("taco"); //add string vectors to the palinvect 
 	p.push_back("cat"); 
-	REQUIRE(b2.cutTest1(p)); 
 
 	//run cut test 1 with an invalid string vector
 	FindPalindrome b3; 
@@ -98,10 +107,13 @@ TEST_CASE("Cut test 1 [FindPalindrome]"){
 TEST_CASE("Cut test 2 [FindPalindrome]"){
 	//run cut test 2 with a valid string vector 
 	FindPalindrome b2; 
-	std::vector<std::string> p; //vector of string vectors to be returned from the toVector() method
-	std::vector<std::string> p1; //vector of string vectors to be returned from the toVector() method
+	std::vector<std::string> p; 
+	std::vector<std::string> p1; 
 	p.push_back("taco"); //add string vectors to the palinvect 
 	p1.push_back("cat"); 
+	REQUIRE(b2.add(p));
+	REQUIRE(b2.add(p1));  
+
 	REQUIRE(b2.cutTest2(p, p1)); 
 
 	//run cut test 2 with an invalid string vector

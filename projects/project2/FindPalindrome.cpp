@@ -29,13 +29,6 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 {	//take the two vectors, loop through the size of currentStringVector and add words from currentStringVector to candidateStringVector 
 	//individually until currentStringVector is empty:
 
-	// 	//test if lowercase candidate string is a vector:
-	// 	if(isPalindrome(candidatestring_lower)){ //If you do have a palindrome in candidateStringVect,
-	// 		PalinVect.push_back(candidateStringVector); //add original version of string to the palindrome vector 
-	// 		PalinCount++; //increase the current count of palindromes found
-	// 		return; //this is your end case!
-	// 	}
-
 	//temporary variables:  
 	std::string candidateString;
 	std::string candidatestring_lower; 
@@ -64,20 +57,6 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 		}
 	return; 
 	}
-	//otherwise, if the currentStringVector isn't empty, do the recursion:
-	//	1) here we will remove an element from the currentStringVector and add it to candidateVector 
-	//	2) Then, once we're done adding, we will check if candidateStringVect is a palindrome 
-	//	3) Also, remember we want to return the ORIGINAL candidateStringVect, not the concatenated one
-// 	for(int i=0; i<currentStringVector.size(); i++){
-// 		//first remove the element from currentString: 
-// 		currentStringVector.erase(find(currentStringVector.begin(), currentStringVector.end(), currentStringVector.at(i))); //remove element at index (i)
-// 		candidateStringVector.push_back(currentStringVector.at(i)); //now add that element to the candidateStringVect: 
-
-// 		//call cut test 2: 
-// 		if(!cutTest2(candidateStringVector, currentStringVector)) continue; //if cutTest2 fails, continue 
-// 		recursiveFindPalindromes(candidateStringVector, currentStringVector); //test if candidate is a plaindrome 
-// 	}
-// }
 }
 
 // private function to determine if a string is a palindrome (given, you
@@ -300,9 +279,8 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 	//add the new string to the end of the string vector 
 	
 	//reset these before adding to the vector 
-	PalinVect.clear(); //if cut test passes, clear vect of strings 
+	//PalinVect.clear(); //if cut test passes, clear vect of strings 
 	//size = 0; 
-	PalinCount = 0; 
 
 	//make sure the vector string you are adding is a valid palindrome: 
 	//concatenate and convert he vector string you're about to add: 
@@ -318,29 +296,52 @@ bool FindPalindrome::add(const vector<string> & stringVector)
 		return false; 
 	}
 	std::vector<string> AddVect; //temporary vector for the recursive function 
+	std::string temp; 
 	if(isValid(strvector)){
-		for(int i=0; i<WordVect.size(); i++){ 
-			AddVect.push_back(WordVect[i]); 
-			convertToLowerCase(AddVect[i]); //add the string vectors to AddVect and convert everything to lowercase 
+		for(int i=0; i<stringVector.size(); i++){ 
+			temp = stringVector[i]; 
+			convertToLowerCase(temp); 
+			AddVect.push_back(temp); 
 	  	}
 	}
 	//make sure this vector doesn't already exist: 
-	for(int i=0; i<PalinVect.size(); i++){
-		if(strVector == AddVect[i]){
-			return false;
+	for(int i=0; i<AddVect.size(); i++){
+		for(int j=i+1; j<AddVect.size(); j++){
+			if(AddVect[i]==AddVect[j]){
+				return false; 
+			} 
 		}
 	}
-
-	PalinVect.push_back(stringVector); 
+	if(isValid(strvector)){
+		for(int i=0; i<WordVect.size(); i++){ 
+			temp = WordVect[i]; 
+			convertToLowerCase(temp); 
+			AddVect.push_back(temp); 
+	  	}
+	}
+	//make sure this vector doesn't already exist: 
+	for(int i=stringVector.size(); i<AddVect.size(); i++){
+		for(int j=0; j<stringVector.size(); j++){
+			if(AddVect[i]==AddVect[j]){
+				return false; 
+			} 
+		}
+	}
 	
+	PalinVect.clear();
+	PalinCount = 0; 
+
 	//delcare temporary vector for recursive method: 
 	//run cut test 1: 
-	if(cutTest1(WordVect)==1){
-		PalinVect.clear(); 
+	if(cutTest1(WordVect)){
+		//PalinVect.clear(); 
 		std::vector<string> temp; 
 		//call the recrusive findPalin method 		
 		recursiveFindPalindromes(temp, WordVect);
 	}
+
+	//PalinVect.push_back(stringVector);
+
 	return true; 
 }
 
