@@ -48,6 +48,14 @@ public:
 private:
 
   //TODO
+
+  Node<T>* headptr; // Pointer to beginning of the linked list
+
+  //also remember that unlike arrays, linked lists cannot just access the ith element of the list on command
+  //in order to access a certain poisition within the list, we must first traverse the list and indicate which node we are pointing to 
+  //therefore, we must define a method which returns the node we are trying to access: 
+  Node<T>* getCurrentNode(std::size_t position) const; //this gets the node at a certain position in the list 
+  std::size_t size; //for your linked list size 
   
 };
 
