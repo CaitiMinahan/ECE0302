@@ -1,4 +1,3 @@
-
 #ifndef _ABSTRACT_LIST_H_
 #define _ABSTRACT_LIST_H_
 
