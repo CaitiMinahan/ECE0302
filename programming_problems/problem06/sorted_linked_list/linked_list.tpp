@@ -8,7 +8,7 @@ Node<T>* LinkedList<T>::getCurrentNode(std::size_t position) const{
   Node<T>* currentPtr; 
   //start at the beginning of the list and traverse by means of a for loop: 
   currentPtr = headptr; 
-  for(std::size_t i=1; i<position; i++){ 
+  for(std::size_t i=0; i<position; i++){ 
     //make sure we are within bounds so that we don't get a seg fault: 
     //break condition: creds stackedoverflow 
     if(position<0 || position>size){
