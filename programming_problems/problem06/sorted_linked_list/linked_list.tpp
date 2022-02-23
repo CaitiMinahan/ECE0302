@@ -113,14 +113,14 @@ LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& x)
 }
 
 template <typename T>
-bool LinkedList<T>::isEmpty() const noexcept
+bool LinkedList<T>::isEmpty() const 
 {
   //return true;
   return (size==0); 
 }
 
 template <typename T>
-std::size_t LinkedList<T>::getLength() const noexcept
+std::size_t LinkedList<T>::getLength() const 
 {
   //return 0;
   return size; 
