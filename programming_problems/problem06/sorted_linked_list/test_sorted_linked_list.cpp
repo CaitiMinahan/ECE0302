@@ -40,6 +40,7 @@ TEST_CASE("Testing insert", "[sorted linked list]") {
 
   char c = 'a';
   while (c <= 'z') {
+    //std::cout << c << "\n"; 
     lst.insert(c);
     ++c;
   }
@@ -47,6 +48,7 @@ TEST_CASE("Testing insert", "[sorted linked list]") {
 
   for (int i = 0; i < 26; ++i) {
     REQUIRE(lst.getEntry(i) == 'a' + i);
+    //std::cout << lst.getEntry(i) << "\n"; 
   }
 }
 

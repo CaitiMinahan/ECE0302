@@ -49,7 +49,6 @@ public:
 private:
 
   //TODO
-
   Node<T>* headptr; // Pointer to beginning of the linked list
 
   //also remember that unlike arrays, linked lists cannot just access the ith element of the list on command
