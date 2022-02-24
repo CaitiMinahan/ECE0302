@@ -40,7 +40,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 
 	//validity check
 	//start from the beginning of the input string
-	//cannot have nested <>
+	//cannot have nested < >
 
 	//1) first, test the markup (anything enclosed in the brackets < >)
 	//determine tag type: START_TAG, END_TAG, EMPTY_TAG, CONTENT, and DECLARATION
@@ -62,9 +62,11 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 
 
 	//2) test the content (everything that IS NOT a matkup)
+		//add condition to make sure the string is not between the brackets < >
+		//define the tag as content 
+	//tonkenizedInputvector gets the tag pushed to the stack 
 
 	//return true if tokenization was successful 
-
 	return false;
 }  // end
 
@@ -72,6 +74,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 // or EMPTY_TAG string (you can change this...)
 static std::string deleteAttributes(std::string input)
 {
+	//white space is permitted in tags 
 	return input;
 }
 
@@ -81,13 +84,14 @@ bool XMLParser::parseTokenizedInput()
 	//matching start and end tags while parsing
 	//this is our second half of validating an XML file 
 
-	
+	//return true if the start and end tags are equal 
 	return false;
 }
 
 // TODO: Implement the clear method here
 void XMLParser::clear()
 {
+	//clear the elementBag and stack variables
 }
 
 vector<TokenStruct> XMLParser::returnTokenizedInput() const
@@ -98,12 +102,17 @@ vector<TokenStruct> XMLParser::returnTokenizedInput() const
 // TODO: Implement the containsElementName method
 bool XMLParser::containsElementName(const std::string &inputString) const
 {
+	//scan and parse methods must be true to have this method return true 
+	//test to see if the element tag is found in this input string (test matching)
+	//return true if the element name tag is found in the string 
 	return false;
 }
 
 // TODO: Implement the frequencyElementName method
 int XMLParser::frequencyElementName(const std::string &inputString) const
 {
+	//search for the element name tag in the string and increase a count variable when found 
+	//compare for matches 
 	return -1;
 }
 
