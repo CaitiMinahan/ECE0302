@@ -6,6 +6,9 @@
 #include <string>
 #include <assert.h>
 #include "XMLParser.hpp"
+#include <algorithm>
+#include <cctype>
+#include <iostream>
 
 // TODO: Implement the constructor here
 XMLParser::XMLParser()
@@ -171,7 +174,12 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 // or EMPTY_TAG string (you can change this...)
 static std::string deleteAttributes(std::string input)
 {
-	//white space is permitted in tags 
+	//remove whitespace from input 
+	for(int i=0; i<input.size(); i++){
+		if(input.at(i)==' '||input.at(i)=='\n'||input.at(i)=='\r'||input.at(i)=='\t'||input.at(i)=='\f'||input.at(i)=='\v'){
+			input.erase(std::remove_if(input.begin(), input.end(), ::isspace), input.end()); //link: https://www.techidelight.com/remove-whitespaces-string-cpp/
+		}
+	}
 	return input;
 }
 
@@ -188,7 +196,10 @@ bool XMLParser::parseTokenizedInput()
 // TODO: Implement the clear method here
 void XMLParser::clear()
 {
-	//clear the elementBag and stack variables
+	//clear the elementBag, stack variable, and the tokenizedVector: 
+	elementNameBag->clear(); 
+	parseStack->clear()
+	tokenizedInputVector->clear(); 
 }
 
 vector<TokenStruct> XMLParser::returnTokenizedInput() const
@@ -200,16 +211,30 @@ vector<TokenStruct> XMLParser::returnTokenizedInput() const
 bool XMLParser::containsElementName(const std::string &inputString) const
 {
 	//scan and parse methods must be true to have this method return true 
-	//test to see if the element tag is found in this input string (test matching)
-	//return true if the element name tag is found in the string 
+	while(tokenizeInputString()&& parseTokenizedInput()){
+	//test to see if the elementNameBag matches the inputstring 
+		for(int i=0; i<elementNameBag->size(); i++){
+			if(elementNameBag.at(i)->contains(inputString)){
+			//return true if the element name tag is found in the string
+				return true; 
+			}
+		}
+	} 
 	return false;
 }
 
 // TODO: Implement the frequencyElementName method
 int XMLParser::frequencyElementName(const std::string &inputString) const
 {
+	int count = 0; 
 	//search for the element name tag in the string and increase a count variable when found 
-	//compare for matches 
-	return -1;
+		for(int i=0; i<elementNameBag->size(); i++){
+			if(elementNameBag.at(i)==inputString){
+			//return true if the element name tag is found in the string
+				count++; 
+			}
+		}
+	//return -1;
+	return count; 
 }
 
