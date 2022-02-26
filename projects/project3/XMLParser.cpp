@@ -24,50 +24,147 @@ XMLParser::~XMLParser()
 // TODO: Implement the tokenizeInputString method
 bool XMLParser::tokenizeInputString(const std::string &inputString)
 {	//scan the input string 
+	TokenStruct token; 	//store TokenStruct object 
 
-	//store both of these in tokenizeInputVector 
-	TokenStruct token; 	//store token type 
-	std::string tokenName; 	//store string of token
+	//1) test all markup
 
-	//tokenizeInputString() should TEST FOR VALID TAGS, including nesting, but should not test for matching start and end tags
-	//so, we have to do two things here: 
-	//1) test valid markup 
-	//2) test valid content 
-
-	//Use elementNameBag to store element names
-
-	//test all markup
-
-	//validity check
-	//start from the beginning of the input string
+	//do I need to test for this??
 	//cannot have nested < >
 
-	//1) first, test the markup (anything enclosed in the brackets < >)
-	//determine tag type: START_TAG, END_TAG, EMPTY_TAG, CONTENT, and DECLARATION
-	//include conditions for the specific markup sections (tags)
-		//condition for end tag
-		//condition for start tag 
-		//condition for declaration tag 
-		//condition for empty tag 
-		//conditions for content 
-	//once we've determined what type of tag we have, save it to your variables
-	//save the token name and token type to a TokenStruct object 	
-		//add conditions where if we found a certain type of a tag in the tests above, update tokenStruct here
+	//helper variables: 
+	int count; //keeps track of the number of characters inside a tag (text between < >)
 
-	//now that we have determined the tag name and type, make sure it matches the proper syntax 
-	//and does not have any weird characters that aren't allowed 
-		//add conditions here for what is and isn't allowed for each tag 
+	//first, let's search through the entire string and determine the tag type:
+	for(int i=0; i<inputString.size(); i++){ 
+		
+		//test for declaration tag 
+		if(inputString.at(i)=='<'&& inputString.at(i+1)=='?'){ //check for <? for the beginning of the tag 
+			i+=2; //skip two more positions to get the first character after the question mark in <?
+			//do not need to valid characters for a declaration tag 
+			while(inputString.at(i)!='?'&&inputString.at(i+1)!='>'){ //now, i is at the first char after the '?' but make sure we aren't at the end of the tag
+				if(count>5000){ return false; } //we have exceeded the allowable amount of text assumed to be contained before the end of the tag (before ?>)
+			i++; //continue to search through the text within the tag 
+			count++; //increase the number of characters allowed in the tag	
+			}
+			i+=2; //skip over two more positions to see if we have another potential tag (so, skip over ?> ending to find another possible start to another tag)
+			
+			//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
+			token.tokenType=DECLARATION;  //assign token type 
+			token.tokenString="DECLARATION"; //assign name: read in chars and append to tokenString
+			tokenizedInputVector.push_back(token); //push entire token to vector 
+		}
+		//test for end tag 
+		if(inputString.at(i)=='<'&&inputString.at(i+1)=='/'){ //test for </ at the beginning of the tag 
+			i+=2; //skip two more positions to get the first character after the forward slash in </
+			while(inputString.at(i)!='>'){ //i is now at the first character after </ but make sure we are not at the end of the tag
+				if(count>5000){ return false; } //we have exceeded the allowable amount of text assumed to be contained before the end of the tag (before >)
+				//input validation to check for illegal characters:
+				if(inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
+					return false; 
+					//tag name cannot begin with any of these characters or numeric digits (text beginning after </ )
+					if(inputString.at(i+2)=='-'||inputString.at(i+2)==','||inputString.at(i+2)=='.'||inputString.at(i+2)=='0'||inputString.at(i+2)=='1'||inputString.at(i+2)=='2'||inputString.at(i+2)=='3'||inputString.at(i+2)=='4'||inputString.at(i+2)=='5'||inputString.at(i+2)=='6'||inputString.at(i+2)=='7'||inputString.at(i+2)=='8'||inputString.at(i+2)=='9'){
+						return false;
+					}
+				}
+			i++; //continue to search through the text within the tag
+			count++; //increase the number of characters allowed in the tag	
+			}
+			i+=1; //skip over one more position to see if we have another potential tag (so, skip over > ending to find another possible start to another tag)
+		
+			//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
+			token.tokenType=END_TAG;  //assign token type 
+			token.tokenString="END_TAG"; //assign name: read in chars and append to tokenString
+			tokenizedInputVector.push_back(token); //push entire token to vector 		
+		}
+		//test for empty tag 
+		if(inputString.at(i)=='<'){ //test for < at the beginning of the tag 
+			i+=1; //skip one more position to get the first immediate character after the open bracket <
+			//For empty-tags, the tag name is the text immediately after the ‘<’ up to the first white space or the ending angle bracket “/>”
+			while((inputString.at(i)!='/'&&inputString.at(i+1)!='>')||inputString.at(i)!=' '){ //now, i is at the first character after < but make sure we are not at the end of the tag 
+				if(count>5000){ return false; } //we have exceeded the alloweable amount of text assumed to be contained before the end of the tag (before />)
+				//input validation to check for illegal characters:
+				if(inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
+					return false; 
+					//tag name cannot begin with any of these characters or numeric digits (text beginning after < )
+					if(inputString.at(i)+2=='-'||inputString.at(i)+2==','||inputString.at(i)+2=='.'||inputString.at(i)+2=='0'||inputString.at(i)+2=='1'||inputString.at(i)+2=='2'||inputString.at(i)+2=='3'){
+						return false; 
+					}
+				}
+			i++; //continue to search through the text within the tag 
+			count++; //increase the number of characters allowed in the tag 
+			}
+			//if we are caught at a whitespace, we must find the ending bracket: 
+			if(inputString.at(i)==' '){ //i is now at the first whitespace found 
+				if(count>5000){ return false; } //make sure we are not outside the text before the end >
+				while(inputString.at(i+1)!='>'){ //while we still have not reached the end bracket >
+					//then keep searching
+					i++;
+					count++; 
+				}
+				//once the while look is broken, we have found the ending bracket > 
+			//i is now at the end bracket, so we need to skip over one position to get past > 
+			i+=1; //skip over one space 
+			}
+			//however, if we are caught at a />, we need to skip over two positions to get to the end of the tag: 
+			if(inputString.at(i)=='/'&&inputString.at(i+1)=='>'){
+			i+=2; //skip over two positions if /> is at the end
+			}
 
-	//tokenizedInputvector gets the tag pushed to the stack 
+			//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
+			token.tokenType=EMPTY_TAG;  //assign token type 
+			token.tokenString="EMPTY_TAG"; //assign name: read in chars and append to tokenString
+			tokenizedInputVector.push_back(token); //push entire token to vector 		
+		}
+		//Otherwise, if you haven't found a declaration, end or empty tag, 
+		//We must've found ourselves a start tag:
+		if(inputString.at(i)=='<'){
+			i+=1; //skip over one position to get the first character immediately after the open bracket <
+			while(inputString.at(i)!=' '||inputString.at(i)!='>'){ //now, i is at the first character after < but make sure we are not at the end of the tag 
+				if(count>5000){ return false; } //we have exceeded the alloweable amount of text assumed to be contained before the end of the tag (before />)
+				//input validation to check for illegal characters:
+				if(inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
+					return false; 
+					//tag name cannot begin with any of these characters or numeric digits (text beginning after < )
+					if(inputString.at(i)+2=='-'||inputString.at(i)+2==','||inputString.at(i)+2=='.'||inputString.at(i)+2=='0'||inputString.at(i)+2=='1'||inputString.at(i)+2=='2'||inputString.at(i)+2=='3'){
+						return false; 
+					}
+				}
+			i++; //continue to search through the text within the tag 
+			count++; //increase the number of characters allowed in the tag 
+			}
+			//if we are caught at a whitespace, we must find the ending bracket: 
+			if(inputString.at(i)==' '){ //i is now at the first whitespace found 
+				if(count>5000){ return false; } //make sure we are not outside the text before the end >
+				while(inputString.at(i+1)!='>'){ //while we still have not reached the end bracket >
+					//then keep searching
+					i++;
+					count++; 
+				}
+				//once the while look is broken, we have found the ending bracket > 
+			//i is now at the end bracket, so we need to skip over one position to get past > 
+			i+=1; //skip over one space 
+			}
+			//however, if we are caught at a />, we need to skip over two positions to get to the end of the tag: 
+			if(inputString.at(i)=='>'){
+			i+=2; //skip over two positions if /> is at the end
+			}
 
-
+			//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
+			token.tokenType=START_TAG;  //assign token type 
+			token.tokenString="START_TAG"; //assign name: read in chars and append to tokenString
+			tokenizedInputVector.push_back(token); //push entire token to vector 		
+		}
 	//2) test the content (everything that IS NOT a matkup)
-		//add condition to make sure the string is not between the brackets < >
-		//define the tag as content 
-	//tonkenizedInputvector gets the tag pushed to the stack 
+	while(inputString.at(i)!='<'&&inputString.at(i)!='>'){ //while we are not the text enclosed in the brackets < >
+		token.tokenType=CONTENT;  //assign token type 
+		token.tokenString="CONTENT"; //assign name: read in chars and append to tokenString
+		tokenizedInputVector.push_back(token); //push entire token to vector 		
+		}		
+	} //end of big ass for loop lmao 
+	//return true for a successfull tokenizedInputString validation method:
+	return true; 
 
-	//return true if tokenization was successful 
-	return false;
+	//return false;
 }  // end
 
 // TODO: Implement a helper function to delete attributes from a START_TAG
