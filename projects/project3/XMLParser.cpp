@@ -198,8 +198,8 @@ void XMLParser::clear()
 {
 	//clear the elementBag, stack variable, and the tokenizedVector: 
 	elementNameBag->clear(); 
-	parseStack->clear()
-	tokenizedInputVector->clear(); 
+	parseStack->clear();
+	tokenizedInputVector.clear(); 
 }
 
 vector<TokenStruct> XMLParser::returnTokenizedInput() const
@@ -211,10 +211,10 @@ vector<TokenStruct> XMLParser::returnTokenizedInput() const
 bool XMLParser::containsElementName(const std::string &inputString) const
 {
 	//scan and parse methods must be true to have this method return true 
-	while(tokenizeInputString()&& parseTokenizedInput()){
+	while(tokenizeInputString(inputString) && parseTokenizedInput()){
 	//test to see if the elementNameBag matches the inputstring 
 		for(int i=0; i<elementNameBag->size(); i++){
-			if(elementNameBag.at(i)->contains(inputString)){
+			if(elementNameBag->contains(inputString)){
 			//return true if the element name tag is found in the string
 				return true; 
 			}
@@ -229,7 +229,7 @@ int XMLParser::frequencyElementName(const std::string &inputString) const
 	int count = 0; 
 	//search for the element name tag in the string and increase a count variable when found 
 		for(int i=0; i<elementNameBag->size(); i++){
-			if(elementNameBag.at(i)==inputString){
+			if(elementNameBag->contains(inputString)){
 			//return true if the element name tag is found in the string
 				count++; 
 			}
