@@ -33,140 +33,146 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 
 	//helper variables: 
 	int count; //keeps track of the number of characters inside a tag (text between < >)
-
 	//first, let's search through the entire string and determine the tag type:
 	for(int i=0; i<inputString.size(); i++){ 
-		
+		count = 0; 
+		int j; 
+		j=i+1; //skip one more position to get the first immediate character after the open bracket <
 		//test for declaration tag 
-		if(inputString.at(i)=='<'&& inputString.at(i+1)=='?'){ //check for <? for the beginning of the tag 
-			i+=2; //skip two more positions to get the first character after the question mark in <?
+		if(inputString.at(j)=='<'&& inputString.at(j+1)=='?'){ //check for <? for the beginning of the tag 
+			j=i+2; //skip two more positions to get the first character after the question mark in <?
 			//do not need to valid characters for a declaration tag 
-			while(inputString.at(i)!='?'&&inputString.at(i+1)!='>'){ //now, i is at the first char after the '?' but make sure we aren't at the end of the tag
+			while(inputString.at(j)!='?'&&inputString.at(j+1)!='>'){ //now, i is at the first char after the '?' but make sure we aren't at the end of the tag
 				if(count>5000){ return false; } //we have exceeded the allowable amount of text assumed to be contained before the end of the tag (before ?>)
-			i++; //continue to search through the text within the tag 
+			j++; //continue to search through the text within the tag 
 			count++; //increase the number of characters allowed in the tag	
 			}
-			i+=2; //skip over two more positions to see if we have another potential tag (so, skip over ?> ending to find another possible start to another tag)
+			j+=2; //skip over two more positions to see if we have another potential tag (so, skip over ?> ending to find another possible start to another tag)
 			
 			//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
 			token.tokenType=DECLARATION;  //assign token type 
 			token.tokenString="DECLARATION"; //assign name: read in chars and append to tokenString
 			tokenizedInputVector.push_back(token); //push entire token to vector 
-			cout << "a";
+			//cout << "a";
 		}  
 		//test for end tag 
-		count = 0; 
+		count = 0;
 		if(inputString.at(i)=='<'&&inputString.at(i+1)=='/'){ //test for </ at the beginning of the tag 
-			i+=2; //skip two more positions to get the first character after the forward slash in </
-			while(inputString.at(i)!='>'){ //i is now at the first character after </ but make sure we are not at the end of the tag
+			j=i+2; //skip one more position to get the first immediate character after the open bracket <
+			while(inputString.at(j)!='>'){ //i is now at the first character after </ but make sure we are not at the end of the tag
 				if(count>5000){ cout << "1"; 
 				return false; } //we have exceeded the allowable amount of text assumed to be contained before the end of the tag (before >)
 				//input validation to check for illegal characters:
-				if(inputString.at(i)=='\''||inputString.at(i)=='\\'||inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
-					cout << "a"; 
+				if(inputString.at(j)=='\''||inputString.at(j)=='\\'||inputString.at(j)=='!'||inputString.at(j)=='"'||inputString.at(j)=='#'||inputString.at(j)=='$'||inputString.at(j)=='%'||inputString.at(j)=='&'||inputString.at(j)=='('||inputString.at(j)==')'||inputString.at(j)=='*'||inputString.at(j)=='+'||inputString.at(j)==','||inputString.at(j)=='/'||inputString.at(j)==';'||inputString.at(j)=='<'||inputString.at(j)=='='||inputString.at(j)=='>'||inputString.at(j)=='?'||inputString.at(j)=='@'||inputString.at(j)=='['||inputString.at(j)=='^'||inputString.at(j)=='`'||inputString.at(j)=='{'||inputString.at(j)=='|'||inputString.at(j)=='}'||inputString.at(j)=='~'||inputString.at(j)==' '){
+					//cout << "a"; 
 					return false; 
 					//tag name cannot begin with any of these characters or numeric digits (text beginning after </ )
-					if(inputString.at(i)=='-'||inputString.at(i)==','||inputString.at(i)=='.'||inputString.at(i)=='0'||inputString.at(i)=='1'||inputString.at(i)=='2'||inputString.at(i)=='3'||inputString.at(i)=='4'||inputString.at(i)=='5'||inputString.at(i)=='6'||inputString.at(i)=='7'||inputString.at(i)=='8'||inputString.at(i)=='9'){
+					if(inputString.at(j)=='-'||inputString.at(j)==','||inputString.at(j)=='.'||inputString.at(j)=='0'||inputString.at(j)=='1'||inputString.at(j)=='2'||inputString.at(j)=='3'|inputString.at(j)=='4'|inputString.at(j)=='5'|inputString.at(j)=='6'|inputString.at(j)=='7'|inputString.at(j)=='8'|inputString.at(j)=='9'){
 						cout << "b"; 
 						return false;
 					}
 				}
-			i++; //continue to search through the text within the tag
+			j++; //continue to search through the text within the tag
 			count++; //increase the number of characters allowed in the tag	
 			}
-			i+=1; //skip over one more position to see if we have another potential tag (so, skip over > ending to find another possible start to another tag)
+			j+=1; //skip over one more position to see if we have another potential tag (so, skip over > ending to find another possible start to another tag)
 		
 			//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
 			token.tokenType=END_TAG;  //assign token type 
 			token.tokenString="END_TAG"; //assign name: read in chars and append to tokenString
 			tokenizedInputVector.push_back(token); //push entire token to vector 	
-			cout << "a";	
+			//cout << "a";	
 		} 
 		//test for empty tag 
 		count = 0; 
 		if(inputString.at(i)=='<'){ //test for < at the beginning of the tag 
-			i+=1; //skip one more position to get the first immediate character after the open bracket <
+			//cout << i; 
+			cout << inputString.at(i); 
+			//cout << j; 
+			j=i+1; //skip one more position to get the first immediate character after the open bracket <
 			//For empty-tags, the tag name is the text immediately after the ‘<’ up to the first white space or the ending angle bracket “/>”
-			while(inputString.at(i)!='>'||inputString.at(i)!=' '){ //now, i is at the first character after < but make sure we are not at the end of the tag 
+			if(inputString.at(j)!='>'||inputString.at(j)!=' '){ break;}//now, i is at the first character after < but make sure we are not at the end of the tag 
 				if(count>5000){ 
-				cout << inputString.at(i);
-				cout << i;  
+				//cout << inputString.at(i);
+				//cout << i;  
 				cout << "c"; 
 				return false; } //we have exceeded the alloweable amount of text assumed to be contained before the end of the tag (before />)
 				//input validation to check for illegal characters:
-				if(inputString.at(i)=='\''||inputString.at(i)=='\\'||inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
-					cout << inputString.at(i); 
-					cout << i; 
+				cout << j; 
+				cout << inputString.at(j); 
+				if(inputString.at(j)=='\''||inputString.at(j)=='\\'||inputString.at(j)=='!'||inputString.at(j)=='"'||inputString.at(j)=='#'||inputString.at(j)=='$'||inputString.at(j)=='%'||inputString.at(j)=='&'||inputString.at(j)=='('||inputString.at(j)==')'||inputString.at(j)=='*'||inputString.at(j)=='+'||inputString.at(j)==','||inputString.at(j)=='/'||inputString.at(j)==';'||inputString.at(j)=='<'||inputString.at(j)=='='||inputString.at(j)=='>'||inputString.at(j)=='?'||inputString.at(j)=='@'||inputString.at(j)=='['||inputString.at(j)=='^'||inputString.at(j)=='`'||inputString.at(j)=='{'||inputString.at(j)=='|'||inputString.at(j)=='}'||inputString.at(j)=='~'||inputString.at(j)==' '){
+					cout << inputString.at(j); 
+					cout << j; 
 					cout << "d"; 
 					return false; 
 					//tag name cannot begin with any of these characters or numeric digits (text beginning after < )
-					if(inputString.at(i)=='-'||inputString.at(i)==','||inputString.at(i)=='.'||inputString.at(i)=='0'||inputString.at(i)=='1'||inputString.at(i)=='2'||inputString.at(i)=='3'){
+					if(inputString.at(j)=='-'||inputString.at(j)==','||inputString.at(j)=='.'||inputString.at(j)=='0'||inputString.at(j)=='1'||inputString.at(j)=='2'||inputString.at(j)=='3'|inputString.at(j)=='4'|inputString.at(j)=='5'|inputString.at(j)=='6'|inputString.at(j)=='7'|inputString.at(j)=='8'|inputString.at(j)=='9'){
 						cout << "e";
 						return false; 
 					}
 				}
-			i++; //continue to search through the text within the tag 
-			cout << i;
+			j++; //continue to search through the text within the tag 
 			count++; //increase the number of characters allowed in the tag 
-			} 
+			char temp = inputString.at(j); 
+			 
 			//if we are caught at a whitespace, we must find the ending bracket: 
-			if(inputString.at(i)==' '||inputString.at(i)=='\n'||inputString.at(i)=='\r'||inputString.at(i)=='\t'){ //i is now at the first whitespace found 
+			if(inputString.at(j)==' '||inputString.at(j)=='\n'||inputString.at(j)=='\r'||inputString.at(j)=='\t'){ //i is now at the first whitespace found 
 				if(count>5000){ cout << "f"; 
 				return false; } //make sure we are not outside the text before the end >
-				while(inputString.at(i+1)!='>'){ //while we still have not reached the end bracket >
+				while(inputString.at(j+1)!='>'){ //while we still have not reached the end bracket >
 					//then keep searching
-					i++;
+					j++;
 					count++; 
 				}
 				//once the while look is broken, we have found the ending bracket > 
 			//i is now at the end bracket, so we need to skip over one position to get past > 
-			i+=1; //skip over one space 
+			j+=1; //skip over one space 
 			}
 			//however, if we are caught at a />, we need to skip over two positions to get to the end of the tag: 
-			if(inputString.at(i)=='/'&&inputString.at(i+1)=='>'){
-			i+=2; //skip over two positions if /> is at the end
+			if(inputString.at(j)=='/'&&inputString.at(j+1)=='>'){
+			j+=2; //skip over two positions if /> is at the end
 			}
 
 			//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
 			token.tokenType=EMPTY_TAG;  //assign token type 
 			token.tokenString="EMPTY_TAG"; //assign name: read in chars and append to tokenString
 			tokenizedInputVector.push_back(token); //push entire token to vector 	
-			cout << "a"; 	
+			//cout << "a"; 	
 		}
 		//Otherwise, if you haven't found a declaration, end or empty tag, 
 		//We must've found ourselves a start tag:
 		count = 0; 
 		if(inputString.at(i)=='<'){
-			i+=1; //skip over one position to get the first character immediately after the open bracket <
-			while(inputString.at(i)!=' '||inputString.at(i)!='>'){ //now, i is at the first character after < but make sure we are not at the end of the tag 
+			j=i+1; //skip one more position to get the first immediate character after the open bracket <
+			while(inputString.at(j)!=' '||inputString.at(j)!='>'){ //now, i is at the first character after < but make sure we are not at the end of the tag 
 				if(count>5000){ cout << "g"; 
 				return false; } //we have exceeded the alloweable amount of text assumed to be contained before the end of the tag (before />)
 				//input validation to check for illegal characters:
-				if(inputString.at(i)=='\''||inputString.at(i)=='\\'||inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
+				if(inputString.at(j)=='\''||inputString.at(j)=='\\'||inputString.at(j)=='!'||inputString.at(j)=='"'||inputString.at(j)=='#'||inputString.at(j)=='$'||inputString.at(j)=='%'||inputString.at(j)=='&'||inputString.at(j)=='('||inputString.at(j)==')'||inputString.at(j)=='*'||inputString.at(j)=='+'||inputString.at(j)==','||inputString.at(j)=='/'||inputString.at(j)==';'||inputString.at(j)=='<'||inputString.at(j)=='='||inputString.at(j)=='>'||inputString.at(j)=='?'||inputString.at(j)=='@'||inputString.at(j)=='['||inputString.at(j)=='^'||inputString.at(j)=='`'||inputString.at(j)=='{'||inputString.at(j)=='|'||inputString.at(j)=='}'||inputString.at(j)=='~'||inputString.at(j)==' '){
 					cout << "h";
 					return false; 
 					//tag name cannot begin with any of these characters or numeric digits (text beginning after < )
-					if(inputString.at(i)=='-'||inputString.at(i)==','||inputString.at(i)=='.'||inputString.at(i)=='0'||inputString.at(i)=='1'||inputString.at(i)=='2'||inputString.at(i)=='3'){
+					if(inputString.at(j)=='-'||inputString.at(j)==','||inputString.at(j)=='.'||inputString.at(j)=='0'||inputString.at(j)=='1'||inputString.at(j)=='2'||inputString.at(j)=='3'|inputString.at(j)=='4'|inputString.at(j)=='5'|inputString.at(j)=='6'|inputString.at(j)=='7'|inputString.at(j)=='8'|inputString.at(j)=='9'){
 						cout << "i"; 
 						return false; 
 					}
 				}
-			i++; //continue to search through the text within the tag 
+			j++; //continue to search through the text within the tag 
 			count++; //increase the number of characters allowed in the tag 
 			}
 			//if we are caught at a whitespace, we must find the ending bracket: 
-			if(inputString.at(i)==' '||inputString.at(i)=='\n'||inputString.at(i)=='\r'||inputString.at(i)=='\t'){ //i is now at the first whitespace found 
+			if(inputString.at(j)==' '||inputString.at(j)=='\n'||inputString.at(j)=='\r'||inputString.at(j)=='\t'){ //i is now at the first whitespace found 
 				if(count>5000){ 
 					cout << "j"; 
 					return false; } //make sure we are not outside the text before the end >
-				while(inputString.at(i+1)!='>'){ //while we still have not reached the end bracket >
+				while(inputString.at(j+1)!='>'){ //while we still have not reached the end bracket >
 					//then keep searching
-					i++;
+					j++;
 					count++; 
 				}
 				//once the while look is broken, we have found the ending bracket > 
 			//i is now at the end bracket, so we need to skip over one position to get past > 
-			i+=1; //skip over one space 
+			j+=1; //skip over one space 
 			}
 			//however, if we are caught at a />, we need to skip over two positions to get to the end of the tag: 
 			if(inputString.at(i)=='>'){
@@ -177,27 +183,26 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			token.tokenType=START_TAG;  //assign token type 
 			token.tokenString="START_TAG"; //assign name: read in chars and append to tokenString
 			tokenizedInputVector.push_back(token); //push entire token to vector 
-			cout << "a";		
+					
 		} 
 	//2) test the content (everything that IS NOT a matkup)
 	while(inputString.at(i)!='<'||inputString.at(i)!='>'){ //while we are not the text enclosed in the brackets < >
 		token.tokenType=CONTENT;  //assign token type 
 		token.tokenString="CONTENT"; //assign name: read in chars and append to tokenString
 		tokenizedInputVector.push_back(token); //push entire token to vector 	
-		cout << "a";	
+		
 		}		
 	} //end of big ass for loop lmao 
-	cout << "a"; 
 	for(int i=0; i<tokenizedInputVector.size(); i++){
 		//if start, end, empty AND is not already in the bag 
 		if(tokenizedInputVector.at(i).tokenType==1||tokenizedInputVector.at(i).tokenType==2||tokenizedInputVector.at(i).tokenType==3){
 			if(elementNameBag->contains(tokenizedInputVector.at(i).tokenString)){
 				elementNameBag->add(tokenizedInputVector.at(i).tokenString); //add token string to the bag if both of them are true 
-				cout << "a";
+				
 			}
 		}
-	} cout<<"a"; 
-
+	} 
+	cout<<"a"; 
 	//return true for a successfull tokenizedInputString validation method:
 	return true; 
 
