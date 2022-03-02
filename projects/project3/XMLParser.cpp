@@ -31,9 +31,6 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 
 	//1) test all markup
 
-	//do I need to test for this??
-	//cannot have nested < >
-
 	//helper variables: 
 	int count; //keeps track of the number of characters inside a tag (text between < >)
 
@@ -62,7 +59,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			while(inputString.at(i)!='>'){ //i is now at the first character after </ but make sure we are not at the end of the tag
 				if(count>5000){ return false; } //we have exceeded the allowable amount of text assumed to be contained before the end of the tag (before >)
 				//input validation to check for illegal characters:
-				if(inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
+				if(inputString.at(i)=='\''||inputString.at(i)=='\\'||inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
 					return false; 
 					//tag name cannot begin with any of these characters or numeric digits (text beginning after </ )
 					if(inputString.at(i+2)=='-'||inputString.at(i+2)==','||inputString.at(i+2)=='.'||inputString.at(i+2)=='0'||inputString.at(i+2)=='1'||inputString.at(i+2)=='2'||inputString.at(i+2)=='3'||inputString.at(i+2)=='4'||inputString.at(i+2)=='5'||inputString.at(i+2)=='6'||inputString.at(i+2)=='7'||inputString.at(i+2)=='8'||inputString.at(i+2)=='9'){
@@ -86,7 +83,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			while((inputString.at(i)!='/'&&inputString.at(i+1)!='>')||inputString.at(i)!=' '){ //now, i is at the first character after < but make sure we are not at the end of the tag 
 				if(count>5000){ return false; } //we have exceeded the alloweable amount of text assumed to be contained before the end of the tag (before />)
 				//input validation to check for illegal characters:
-				if(inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
+				if(inputString.at(i)=='\''||inputString.at(i)=='\\'||inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
 					return false; 
 					//tag name cannot begin with any of these characters or numeric digits (text beginning after < )
 					if(inputString.at(i)+2=='-'||inputString.at(i)+2==','||inputString.at(i)+2=='.'||inputString.at(i)+2=='0'||inputString.at(i)+2=='1'||inputString.at(i)+2=='2'||inputString.at(i)+2=='3'){
@@ -97,7 +94,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			count++; //increase the number of characters allowed in the tag 
 			}
 			//if we are caught at a whitespace, we must find the ending bracket: 
-			if(inputString.at(i)==' '){ //i is now at the first whitespace found 
+			if(inputString.at(i)==' '||inputString.at(i)=='\n'||inputString.at(i)=='\r'||inputString.at(i)=='\t'){ //i is now at the first whitespace found 
 				if(count>5000){ return false; } //make sure we are not outside the text before the end >
 				while(inputString.at(i+1)!='>'){ //while we still have not reached the end bracket >
 					//then keep searching
@@ -125,7 +122,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			while(inputString.at(i)!=' '||inputString.at(i)!='>'){ //now, i is at the first character after < but make sure we are not at the end of the tag 
 				if(count>5000){ return false; } //we have exceeded the alloweable amount of text assumed to be contained before the end of the tag (before />)
 				//input validation to check for illegal characters:
-				if(inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
+				if(inputString.at(i)=='\''||inputString.at(i)=='\\'||inputString.at(i)=='!'||inputString.at(i)=='"'||inputString.at(i)=='#'||inputString.at(i)=='$'||inputString.at(i)=='%'||inputString.at(i)=='&'||inputString.at(i)=='&'||inputString.at(i)=='('||inputString.at(i)==')'||inputString.at(i)=='*'||inputString.at(i)=='+'||inputString.at(i)==','||inputString.at(i)=='/'||inputString.at(i)==';'||inputString.at(i)=='<'||inputString.at(i)=='='||inputString.at(i)=='>'||inputString.at(i)=='?'||inputString.at(i)=='@'||inputString.at(i)=='['||inputString.at(i)=='^'||inputString.at(i)=='`'||inputString.at(i)=='{'||inputString.at(i)=='|'||inputString.at(i)=='}'||inputString.at(i)=='~'||inputString.at(i)==' '){
 					return false; 
 					//tag name cannot begin with any of these characters or numeric digits (text beginning after < )
 					if(inputString.at(i)+2=='-'||inputString.at(i)+2==','||inputString.at(i)+2=='.'||inputString.at(i)+2=='0'||inputString.at(i)+2=='1'||inputString.at(i)+2=='2'||inputString.at(i)+2=='3'){
@@ -136,7 +133,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			count++; //increase the number of characters allowed in the tag 
 			}
 			//if we are caught at a whitespace, we must find the ending bracket: 
-			if(inputString.at(i)==' '){ //i is now at the first whitespace found 
+			if(inputString.at(i)==' '||inputString.at(i)=='\n'||inputString.at(i)=='\r'||inputString.at(i)=='\t'){ //i is now at the first whitespace found 
 				if(count>5000){ return false; } //make sure we are not outside the text before the end >
 				while(inputString.at(i+1)!='>'){ //while we still have not reached the end bracket >
 					//then keep searching
@@ -164,6 +161,16 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 		tokenizedInputVector.push_back(token); //push entire token to vector 		
 		}		
 	} //end of big ass for loop lmao 
+
+	for(int i=0; i<tokenizedInputVector.size(); i++){
+		//if start, end, empty AND is not already in the bag 
+		if(tokenizedInputVector.at(i).tokenType==1||tokenizedInputVector.at(i).tokenType==2||tokenizedInputVector.at(i).tokenType==3){
+			if(elementNameBag->contains(tokenizedInputVector.at(i).tokenString)){
+				elementNameBag->add(tokenizedInputVector.at(i).tokenString); //add token string to the bag if both of them are true 
+			}
+		}
+	}
+
 	//return true for a successfull tokenizedInputString validation method:
 	return true; 
 
@@ -189,8 +196,51 @@ bool XMLParser::parseTokenizedInput()
 	//matching start and end tags while parsing
 	//this is our second half of validating an XML file 
 
-	//return true if the start and end tags are equal 
-	return false;
+	//use the stack to make sure XML is balanced 
+
+	//before we begin searching through the tokenizedinputstringvector, make sure we have proper XML syntax:
+	//vector cannot begin with a end, empty or content tag
+	if(tokenizedInputVector.at(0).tokenType==2||tokenizedInputVector.at(0).tokenType==3||tokenizedInputVector.at(0).tokenType==4){
+		//vector cannot end with a start, empty or content tag
+		if(tokenizedInputVector.back().tokenType==1||tokenizedInputVector.back().tokenType==3||tokenizedInputVector.back().tokenType==4){
+			//vector cannot begin with an 'end' tag or end with a 'start' tag 
+			if(tokenizedInputVector.at(0).tokenType==2&&tokenizedInputVector.back().tokenType==1){
+				return false; //return false if any of the incorrect syntax is found with the tags 
+			}
+		}
+	}
+	//now we will search our tokenizedinputvector and push the appropriate tag names to the stack 
+	//for loop where we search tokenizedinputvector 
+	for(int i=0; i<tokenizedInputVector.size(); i++){
+		//make comparisons for the tag types 
+		if(tokenizedInputVector.at(i).tokenType==1){
+			parseStack->push(tokenizedInputVector.at(i).tokenString); //add the string to the stack 
+		}
+		//after pushing, peek the top of the stack and compare the end tag to the start tag: 
+		if(tokenizedInputVector.at(i).tokenType==2){
+			//peek the top of the stack and see if it is equal to its corresponding start tag
+			parseStack->peek();
+			//if they don't match, return false 
+			if(parseStack->peek()!=tokenizedInputVector.at(i).tokenString){
+				return false; //the tags don't match, so we have an invalid XML 
+			}
+			else{ //if they match, pop it, and keep comparing
+				elementNameBag->add(tokenizedInputVector.at(i).tokenString);
+				parseStack->pop(); //pop that tag off of the stack to continue comparing
+			}			
+		}
+		//if we find an empty tag, add it to the bag: 
+		if(tokenizedInputVector.at(i).tokenType==3){
+			elementNameBag->add(tokenizedInputVector.at(i).tokenString);
+		}
+		//continue searching, comparing and popping until stack is empty
+	}
+	//the stack must be empty to return true, if not return false 
+	//test is stack is empty: 
+	if(parseStack->isEmpty()==false){
+		return false; //return false is the stack is NOT empty
+	}
+	return true; //otherwise, we return true if the stack is empty 
 }
 
 // TODO: Implement the clear method here
@@ -211,16 +261,13 @@ vector<TokenStruct> XMLParser::returnTokenizedInput() const
 bool XMLParser::containsElementName(const std::string &inputString) const
 {
 	//scan and parse methods must be true to have this method return true 
-	while(tokenizeInputString(inputString) && parseTokenizedInput()){
-	//test to see if the elementNameBag matches the inputstring 
-		for(int i=0; i<elementNameBag->size(); i++){
-			if(elementNameBag->contains(inputString)){
-			//return true if the element name tag is found in the string
-				return true; 
-			}
-		}
-	} 
-	return false;
+	if(elementNameBag->isEmpty()){
+		return elementNameBag->contains(inputString); 
+	}
+	else{ 
+		throw logic_error ("invalid XML"); 
+	}
+	//return false;
 }
 
 // TODO: Implement the frequencyElementName method
