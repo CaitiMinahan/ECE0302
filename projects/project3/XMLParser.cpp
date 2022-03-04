@@ -36,13 +36,14 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 	int i = 0; 
 	int j = 0; 
 	//first, let's search through the entire string and determine the tag type:
-	while(i<inputString.size()){ 
-
+	for(i=0; i<inputString.size(); i=i+j){ 
+		cout << i; 
 		//if we find the open bracket to any tag: 
 		if(inputString.at(i)=='<'){
 
 			//test for declaration tag 
 			if(inputString.at(i+1)=='?'){ //check for <? for the beginning of the tag 
+				cout << "declaration tag\n";
 				j=i+1; //skip one more position to get the first character after the question mark in <?
 				//make sure we are not at the end of the declaration tag 
 				while(inputString.at(j)!='?'&&inputString.at(j+1)!='>'){ //now, j is at the first char after the '?' but make sure we aren't at the end of the tag
@@ -59,16 +60,17 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 				//cout << "a";
 			}  
 			//test for end tag 
-			count = 0; //reset the count 
 			//char temp1 = inputString.at(i); 
-			if(inputString.at(i+1)=='/'){ //test for / at the beginning of the tag 
-				j=i+1; //skip one more position to get the first immediate character after the forward slash /
+			else if(inputString.at(i+1)=='/'){ //test for / at the beginning of the tag
+				cout << "end tag\n"; 
+				count = 0; //reset the count 
+				j=i+2; //skip one more position to get the first immediate character after the forward slash /
 				while(inputString.at(j)!='>'){ //j is now at the first character after </ but make sure we are not at the end of the tag
 					if(count>5000){ cout << "u"; 
 					return false; } //we have exceeded the allowable amount of text assumed to be contained before the end of the tag (before >)
 					//input validation to check for illegal characters:
 					if(inputString.at(j)=='\''||inputString.at(j)=='\\'||inputString.at(j)=='!'||inputString.at(j)=='"'||inputString.at(j)=='#'||inputString.at(j)=='$'||inputString.at(j)=='%'||inputString.at(j)=='&'||inputString.at(j)=='('||inputString.at(j)==')'||inputString.at(j)=='*'||inputString.at(j)=='+'||inputString.at(j)==','||inputString.at(j)=='/'||inputString.at(j)==';'||inputString.at(j)=='<'||inputString.at(j)=='='||inputString.at(j)=='>'||inputString.at(j)=='?'||inputString.at(j)=='@'||inputString.at(j)=='['||inputString.at(j)=='^'||inputString.at(j)=='`'||inputString.at(j)=='{'||inputString.at(j)=='|'||inputString.at(j)=='}'||inputString.at(j)=='~'||inputString.at(j)==' '){
-						//cout << "z"; 
+						cout << "z"; 
 						return false; 
 						//tag name cannot begin with any of these characters or numeric digits (text beginning after </ )
 						if(inputString.at(j)=='-'||inputString.at(j)==','||inputString.at(j)=='.'||inputString.at(j)=='0'||inputString.at(j)=='1'||inputString.at(j)=='2'||inputString.at(j)=='3'|inputString.at(j)=='4'|inputString.at(j)=='5'|inputString.at(j)=='6'|inputString.at(j)=='7'|inputString.at(j)=='8'|inputString.at(j)=='9'){
@@ -85,11 +87,18 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 				token.tokenType=END_TAG;  //assign token type 
 				token.tokenString="END_TAG"; //assign name: read in chars and append to tokenString
 				tokenizedInputVector.push_back(token); //push entire token to vector 
-				//cout << "p";	
+				//cout << tokenizedInputVector.at(0).tokenString; 
+			std::string temp = ""; 
+			while(inputString.at(j)!='<'&&inputString.at(j)!='>'){ //while we are not the text enclosed in the brackets < >
+				temp += inputString.at(j); 
+				j++; 
+			}
+				cout << "p";	
 			} 
-			//test for empty tag 
-			// count = 0; 
-			// if(inputString.at(i+1)!='<'){ //empty tags just have < and then characters after it 
+			//test for empty tag
+			// else if(inputString.at(i+1)!='<'){ //empty tags just have < and then characters after it 
+			// 	cout << "empty tag\n";
+			// 	count = 0; 
 			// 	cout << inputString.at(i); //should just be < if we make it to here
 			// 	j=i+1; //skip one more position to get the first immediate character after the open bracket <
 			// 	//For empty-tags, the tag name is the text immediately after the ‘<’ up to the first white space or the ending angle bracket “/>”
@@ -114,15 +123,16 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			// 	count++; //increase the number of characters allowed in the tag 
 				
 			// 	//if we are caught at a whitespace, we must find the ending bracket: 
-			// 	// while(inputString.at(j)!='>'){ //while we still have not reached the end bracket >
-			// 	// 	if(inputString.at(j)==' '||inputString.at(j)=='\n'||inputString.at(j)=='\r'||inputString.at(j)=='\t'){ //i is now at the first whitespace found 
-			// 	// 		if(count>5000){ cout << "f"; 
-			// 	// 		return false; } //make sure we are not outside the text before the end >
-			// 	// 			//then keep searching
-			// 	// 			j++;
-			// 	// 			count++; 
-			// 	// 	}
-			// 	// }
+			// 	while(inputString.at(j)!='>'){ //while we still have not reached the end bracket >
+			// 		if(inputString.at(j)==' '||inputString.at(j)=='\n'||inputString.at(j)=='\r'||inputString.at(j)=='\t'){ //i is now at the first whitespace found 
+			// 			if(count>5000){ cout << "f"; 
+			// 			return false; } //make sure we are not outside the text before the end >
+			// 				//then keep searching
+			// 		}
+			// 		j++;
+			// 		count++; //might have to move this back 
+			// 	}
+				
 			// 	//once the if loop is broken, we have found the ending bracket > 
 			// 	//j is now at the end bracket, so we need to skip over one position to get past > 
 			// 	j+=1; //skip over one space 
@@ -140,8 +150,9 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 			// }
 			//Otherwise, if you haven't found a declaration, end or empty tag, 
 			//We must've found ourselves a start tag:
-			count = 0; 
-			if(inputString.at(i+1)=='<'){
+			else{
+				cout << "start tag\n"; 
+				count = 0; 
 				j=i+1; //skip one more position to get the first immediate character after the open bracket <
 				while(inputString.at(j)!=' '&&inputString.at(j)!='>'){ //now, i is at the first character after < but make sure we are not at the end of the tag 
 					if(count>5000){ cout << "g"; 
@@ -165,10 +176,10 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 					if(inputString.at(j)==' '||inputString.at(j)=='\n'||inputString.at(j)=='\r'||inputString.at(j)=='\t'){ //i is now at the first whitespace found 
 						if(count>5000){ cout << "f"; 
 						return false; } //make sure we are not outside the text before the end >
-							//then keep searching
-							j++;
-							count++; 
+							//then keep searching	
 					}
+					j++;
+					count++; 
 				}
 				//once the if loop is broken, we have found the ending bracket > 
 				//j is now at the end bracket, so we need to skip over one position to get past > 
@@ -199,7 +210,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 	token.tokenString=temp; 
 	tokenizedInputVector.push_back(token); //push entire token to vector 	
 	
-	i+=j; //update i to find the next tag-->skip by j positions so that we start our search at the beginning of the next tag 
+	//i+=j; //update i to find the next tag-->skip by j positions so that we start our search at the beginning of the next tag 
 	
 	} //end of big ass for loop lmao 
 	//here we are done search through the length of the input string and are now ready to 
