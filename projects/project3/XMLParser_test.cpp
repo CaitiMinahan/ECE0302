@@ -47,11 +47,12 @@ TEST_CASE( "Test XMLParser tokenizeInputString", "[XMLParser]" )
 	   INFO("Hint: tokenize single element test of XMLParse");
 		// Create an instance of XMLParse
 		XMLParser myXMLParser;
-		string testString = "<test>stuff</test>";
+		//string testString = "<test>stuff</test>";
+		string testString = "<empty/><start>"; 
 		bool success;
 		//string testString = "<test></test>"; 
 		success = myXMLParser.tokenizeInputString(testString);
-		cout << myXMLParser.returnTokenizedInput().at(0).tokenString; 
+		//cout << myXMLParser.returnTokenizedInput().at(0).tokenString; 
 		REQUIRE(success);
 }
 
