@@ -47,12 +47,14 @@ TEST_CASE( "Test XMLParser tokenizeInputString", "[XMLParser]" )
 	   INFO("Hint: tokenize single element test of XMLParse");
 		// Create an instance of XMLParse
 		XMLParser myXMLParser;
+		//string testString = "<?declaration?><?declaration2?>"; 
+		//string testString = "</end></end2>"; 
+		string testString = "<start>content<empty/>";
+
 		//string testString = "<test>stuff</test>";
-		string testString = "<empty/><start>"; 
 		bool success;
-		//string testString = "<test></test>"; 
 		success = myXMLParser.tokenizeInputString(testString);
-		//cout << myXMLParser.returnTokenizedInput().at(0).tokenString; 
+		//cout << myXMLParser.returnTokenizedInput().at(1).tokenString; //right now, it is adding two empty tags to the vector 
 		REQUIRE(success);
 }
 

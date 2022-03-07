@@ -35,34 +35,44 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 	int count = 0; //keeps track of the number of characters inside a tag (text between < >)
 	int i = 0; 
 	int j = 0; 
-	//first, let's search through the entire string and determine the tag type:
+	std::string temp = ""; 
+	//***************************************************************************//
+	//first, let's search through the entire string and determine the tag type:  //
+	//***************************************************************************//
 	for(i=0; i<inputString.size(); i=i+j){ 
 		cout << i << "\n"; 
 		//if we find the open bracket to any tag: 
 		if(inputString.at(i)=='<'){
-			//test for declaration tag 
+			//********************************//
+			//first, test for declaration tag //
+			//********************************//
 			if(inputString.at(i+1)=='?'){ //check for <? for the beginning of the tag 
 				cout << "declaration tag\n";
-				j=i+1; //skip one more position to get the first character after the question mark in <?
+				j=i+2; //skip one more position to get the first character after the question mark in <?
 				//make sure we are not at the end of the declaration tag 
 				while(inputString.at(j)!='?'&&inputString.at(j+1)!='>'){ //now, j is at the first char after the '?' but make sure we aren't at the end of the tag
 					if(count>5000){ return false; } //we have exceeded the allowable amount of text assumed to be contained before the end of the tag (before ?>)
+					
+					//read in characters from tag and append to this temp string 
+					temp += inputString.at(j);
+
 				j++; //continue to search through the text within the tag 
 				count++; //increase the number of characters allowed in the tag	
 				}
-				j+=2; //skip over two more positions to see if we have another potential tag (so, skip over ?> ending to find another possible start to another tag)
+				j+=1; //skip over two more positions to see if we have another potential tag (so, skip over ?> ending to find another possible start to another tag)
 				
 				//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
+				//temp should get updated here as declaration 
 				token.tokenType=DECLARATION;  //assign token type 
-				token.tokenString="DECLARATION"; //assign name: read in chars and append to tokenString
+				token.tokenString=temp; //assign name
 				tokenizedInputVector.push_back(token); //push entire token to vector 
-				//cout << "a";
+				cout << temp << "\n"; 
 			}  
-			//test for end tag 
-			//char temp1 = inputString.at(i); 
+			//*************************//
+			//second, test for end tag //
+			//*************************//
 			else if(inputString.at(i+1)=='/'){ //test for / at the beginning of the tag
 				cout << "end tag\n"; 
-				std::string temp = ""; 
 				count = 0; //reset the count 
 				j=i+2; //skip one more position to get the first immediate character after the forward slash /
 				while(inputString.at(j)!='>'){ //j is now at the first character after </ but make sure we are not at the end of the tag
@@ -78,20 +88,20 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 							return false;
 						}
 					}
-					if(inputString.at(j)!='>'){ 
-						temp += inputString.at(j); 
-					} 
+					//read in characters from tag and append to this temp string 
+					temp += inputString.at(j); 
+
 				j++; //continue to search through the text within the tag
 				count++; //increase the number of characters allowed in the tag	
 				}
 			//j+=1; //skip over one more position to see if we have another potential tag (so, skip over > ending to find another possible start to another tag)
-			cout << temp << "\n"; 
-			//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
+			
+			//once we've determined this tag to be an end tag, update tokenStruct and push it to the tokenizedVector:
+			//temp should get updated here as end 
 			token.tokenType=END_TAG;  //assign token type 
 			token.tokenString=temp; //assign name: read in chars and append to tokenString
+			cout << temp << "\n"; 
 			tokenizedInputVector.push_back(token); //push entire token to vector 
-			//cout << tokenizedInputVector.at(0).tokenString; 
-			//cout << "p";	
 			} 
 			//test for empty tag
 			//else if(inputString.at(i+1)!='<'){ //empty tags just have < and then characters after it 
@@ -146,10 +156,12 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 				// tokenizedInputVector.push_back(token); //push entire token to vector 	
 				// cout << "y"; 	
 			//}
-			//Otherwise, if you haven't found a declaration, end or empty tag, 
-			//We must've found ourselves a start tag:
+
+			//*************************************************************//
+			//third, if you haven't found a declaration, or an empty tag,  //
+			//We must've found ourselves either an empty or start tag:	   //
+			//*************************************************************//
 			else{
-				std::string temp = ""; 
 				count = 0; 
 				j=i+1; //skip one more position to get the first immediate character after the open bracket <
 				while(inputString.at(j)!=' '&&inputString.at(j)!='>'){ //now, i is at the first character after < but make sure we are not at the end of the tag 
@@ -172,6 +184,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 					
 					//however, if we are caught at a /, we need to skip over one position to get to the end of the tag 
 					if(inputString.at(j)=='/' && inputString.at(j+1)=='>'){
+						//temp should get updated here as empty 
 						cout << "empty tag\n";
 						token.tokenType=EMPTY_TAG;  //assign token type 
 						temp.erase(temp.size()-1);
@@ -180,49 +193,55 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 						tokenizedInputVector.push_back(token); //push entire token to vector 
 						break;	
 						}
-					}
+						
+					}//end of if statement which appends the tag string to temp
 				j++; //continue to search through the text within the tag 
 				count++; //increase the number of characters allowed in the tag 
-				} //cout << temp << "\n"; 
+				} //once the while loop is broken, we have found the ending bracket >   
+
 				//if we are caught at a whitespace, we must find the ending bracket: 
-				while(inputString.at(j)!='>'){ //while we still have not reached the end bracket >
-					if(inputString.at(j)==' '||inputString.at(j)=='\n'||inputString.at(j)=='\r'||inputString.at(j)=='\t'){ //i is now at the first whitespace found 
-						if(count>5000){ cout << "f"; 
-						return false; } //make sure we are not outside the text before the end >
-							//then keep searching	
-					}
-					j++;
-					count++; 
-				}
-				//once the if loop is broken, we have found the ending bracket > 
+				// while(inputString.at(j)!='>'){ //while we still have not reached the end bracket >
+				// 	if(inputString.at(j)==' '||inputString.at(j)=='\n'||inputString.at(j)=='\r'||inputString.at(j)=='\t'){ //i is now at the first whitespace found 
+				// 		if(count>5000){ cout << "f"; 
+				// 		return false; } //make sure we are not outside the text before the end >
+				// 			//then keep searching	
+				// 	}
+				// 	j++;
+				// 	count++; 
+				// }
 				
 				//once we've determined this tag to be a start tag, update tokenStruct and push it to the tokenizedVector:
+				//temp should get updated here as start 
 				cout << "start tag\n"; 
 				cout << temp << "\n"; 
 				token.tokenType=START_TAG;  //assign token type 
 				token.tokenString=temp; //assign name: read in chars and append to tokenString
 				tokenizedInputVector.push_back(token); //push entire token to vector 
-						
 			} 
-		}//end of big ass if statement lmao 
-	//by now, we should have determine all types of tags and names if we found any and should have added them appropriately to the vector 	
-
-	//2)next, test the content (everything that IS NOT a matkup)
-	std::string temp = ""; 
+			
+		}//end of big ass if statement lmao
+	//************************************************************************************************************************************//	 
+	//by now, we should have determine all types of tags and names if we found any and should have added them appropriately to the vector //
+	//************************************************************************************************************************************//	 
+	
+	//************************************************************//
+	//2)next, test the content (everything that IS NOT a matkup)  //
+	//************************************************************//
 	while(inputString.at(j)!='<'&&inputString.at(j)!='>'){ //while we are not the text enclosed in the brackets < >
 		temp += inputString.at(j); 
 		j++; 
-	} cout << temp << "\n"; 
+	} 
+	//temp should get updated here as content
+	cout << temp << "\n";  	  
 	token.tokenType=CONTENT;  //assign token type 
-	//token.tokenString="CONTENT"; //assign name: read in chars and append to tokenString
 	token.tokenString=temp; 
-	tokenizedInputVector.push_back(token); //push entire token to vector 	
-	
-	//i+=j; //update i to find the next tag-->skip by j positions so that we start our search at the beginning of the next tag 
+	tokenizedInputVector.push_back(token); //push entire token to vector
 	
 	} //end of big ass for loop lmao 
-	//here we are done search through the length of the input string and are now ready to 
-	//start adding the tag types and names to our element bag
+	//************************************************************************************//
+	//here we are done search through the length of the input string and are now ready to //
+	//start adding the tag types and names to our element bag							  //
+	//************************************************************************************//
 
 	for(int i=0; i<tokenizedInputVector.size(); i++){
 		//if start, end, empty AND is not already in the bag 
