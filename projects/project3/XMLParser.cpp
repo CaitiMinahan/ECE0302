@@ -59,8 +59,9 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 					if(count>5000){ return false; } //we have exceeded the allowable amount of text assumed to be contained before the end of the tag (before ?>)
 					
 					//read in characters from tag and append to this temp string 
-					temp += inputString.at(j);
-
+					if(inputString.at(j)!='?'){ 
+					temp += inputString.at(j); 
+					}
 				j++; //continue to search through the text within the tag 
 				count++; //increase the number of characters allowed in the tag	
 				}
@@ -96,14 +97,15 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 							return false;
 						}
 					}
+					if(inputString.at(j)!='>'){ 
 					//read in characters from tag and append to this temp string 
 					temp += inputString.at(j); 
-
+					}
 				j++; //continue to search through the text within the tag
 				count++; //increase the number of characters allowed in the tag	
 				}
 				}
-			//j+=1; //skip over one more position to see if we have another potential tag (so, skip over > ending to find another possible start to another tag)
+			j+=1; //skip over one more position to see if we have another potential tag (so, skip over > ending to find another possible start to another tag)
 			
 			//once we've determined this tag to be an end tag, update tokenStruct and push it to the tokenizedVector:
 			//temp should get updated here as end 
@@ -212,7 +214,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 	//add tags to the element bag 
 	for(int i=0; i<tokenizedInputVector.size(); i++){
 		//if start, end, empty and declaration is not already in the bag 
-		if(tokenizedInputVector.at(i).tokenType==1||tokenizedInputVector.at(i).tokenType==2||tokenizedInputVector.at(i).tokenType==3){
+		if(tokenizedInputVector.at(i).tokenType==1||tokenizedInputVector.at(i).tokenType==2||tokenizedInputVector.at(i).tokenType==3||tokenizedInputVector.at(i).tokenType==5){
 			if(elementNameBag->contains(tokenizedInputVector.at(i).tokenString)){
 				elementNameBag->add(tokenizedInputVector.at(i).tokenString); //add token string to the bag if both of them are true 
 				
