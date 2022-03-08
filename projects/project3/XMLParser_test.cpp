@@ -153,6 +153,10 @@ TEST_CASE( "Test XMLParser tokenizeInputString Handout-1", "[XMLParser]" )
 		// for ( int i = 0; i < result.size(); i++ ) { 
 		// 	std::cout << result[i].tokenString << std::endl; 
 		// }
+		for(int i=0; i<output.size(); i++){
+			cout << output[i].tokenString << "\n"; //vector only gets the delcaration tag and two \n characters
+			cout << myXMLParser.returnTokenizedInput().at(i).tokenString << "\n"; 
+		}
 
 		// exit(0); 
 		REQUIRE(result.size() == output.size()); //gets all the correct tags, but doesn't update the size 

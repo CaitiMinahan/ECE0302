@@ -65,7 +65,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 				count++; //increase the number of characters allowed in the tag	
 				}
 				}
-				j+=1; //skip over two more positions to see if we have another potential tag (so, skip over ?> ending to find another possible start to another tag)
+				j+=2; //skip over two more positions to see if we have another potential tag (so, skip over ?> ending to find another possible start to another tag)
 				
 				//once we've determined this tag to be a declaration tag, update tokenStruct and push it to the tokenizedVector:
 				//temp should get updated here as declaration 
@@ -203,13 +203,13 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 	//start adding the tag types and names to our element bag							  //
 	//************************************************************************************//
 
+	//removes the new line characters from tags: 
 	if ( tokenizedInputVector.at(tokenizedInputVector.size()-1).tokenType == 4 ) { 
 		//remove the token 
-		tokenizedInputVector.pop_back(); 
+		tokenizedInputVector.pop_back(); //pop the new line character off 
 	}
 
-
-
+	//add tags to the element bag 
 	for(int i=0; i<tokenizedInputVector.size(); i++){
 		//if start, end, empty and declaration is not already in the bag 
 		if(tokenizedInputVector.at(i).tokenType==1||tokenizedInputVector.at(i).tokenType==2||tokenizedInputVector.at(i).tokenType==3){
