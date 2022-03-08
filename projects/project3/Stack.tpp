@@ -55,15 +55,15 @@ bool Stack<ItemType>::push(const ItemType& newItem)
 template<class ItemType>
 ItemType Stack<ItemType>::peek() const
 {
-	headPtr->getNext(); //access the item at the top of the stack 
-	ItemType returnItem;
-	return returnItem;
-
 	//throw catch if the stack is empty 
     if(isEmpty()){
 		throw std::logic_error("list is empty, nothing to peek");
 	}
-}  // end peek
+	//headPtr->getNext(); //access the item at the top of the stack 
+	//ItemType returnItem;
+	//returnItem.getItem(); 
+	return headPtr->getItem();
+} 
 
 // TODO: Implement the pop method here
 template<class ItemType>
@@ -89,6 +89,21 @@ bool Stack<ItemType>::pop()
 template<class ItemType>
 void Stack<ItemType>::clear()
 {
-	headPtr = nullptr; //to erase everything 
+	if (headPtr != nullptr) { 
+		Node<ItemType>* tempNodePtr = headPtr; //extract the original headPtr
+		Node<ItemType>* nextNodePtr = headPtr->getNext(); 
+		
+		
+
+		while(nextNodePtr!=nullptr){
+			delete tempNodePtr; 
+			tempNodePtr = nextNodePtr; 
+			nextNodePtr = nextNodePtr->getNext(); 
+		}
+
+		
+		currentSize = 0; 
+		headPtr = nullptr; 
+	}
 }  // end clear
 
