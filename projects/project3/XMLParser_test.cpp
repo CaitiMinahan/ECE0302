@@ -105,7 +105,7 @@ TEST_CASE( "Test Stack handout-1", "[XMLParser]" )
        REQUIRE(charStack.isEmpty() == true);      
 }
 
-// You can assume that the beginning and the end of CONTENT will not be filled with whitespace
+// // You can assume that the beginning and the end of CONTENT will not be filled with whitespace
 TEST_CASE( "Test XMLParser tokenizeInputString Handout-0", "[XMLParser]" )
 {
 	   INFO("Hint: tokenize single element test of XMLParse");
@@ -157,10 +157,10 @@ TEST_CASE( "Test XMLParser tokenizeInputString Handout-1", "[XMLParser]" )
 									TokenStruct{StringTokenType::END_TAG, std::string("To")},
 									TokenStruct{StringTokenType::END_TAG, std::string("Note")}};
 		std::vector<TokenStruct> output = myXMLParser.returnTokenizedInput();
-		for ( int i = 0; i < result.size(); i++ ) { 
-			std::cout << result[i].tokenString << std::endl; 
-			//std::cout << myXMLParser.returnTokenizedInput().at(i).tokenString << std::endl; 
-		}
+		// for ( int i = 0; i < result.size(); i++ ) { 
+		// 	std::cout << result[i].tokenString << std::endl; 
+		// 	//std::cout << myXMLParser.returnTokenizedInput().at(i).tokenString << std::endl; 
+		// }
 		for(int i=0; i<output.size(); i++){
 			cout << output[i].tokenString << "\n"; //vector only gets the delcaration tag and two \n characters
 			//cout << myXMLParser.returnTokenizedInput().at(i).tokenString << "\n"; 
@@ -173,55 +173,55 @@ TEST_CASE( "Test XMLParser tokenizeInputString Handout-1", "[XMLParser]" )
 		}
 }
 
-// TEST_CASE( "Test XMLParser parseTokenizedInput Handout-0", "[XMLParser]" )
-// {
-// 	   INFO("Hint: tokenize single element test of XMLParse");
-// 		// Create an instance of XMLParse
-// 		XMLParser myXMLParser;
-// 		string testString = "<test myattr='abcdef'>stuff<this_is_empty_tag/></test>";
-// 		bool success;
-// 		success = myXMLParser.tokenizeInputString(testString);
-// 		REQUIRE(success);
-// 		std::vector<TokenStruct> result = {TokenStruct{StringTokenType::START_TAG, std::string("test")},
-// 											TokenStruct{StringTokenType::CONTENT, std::string("stuff")},
-// 											TokenStruct{StringTokenType::EMPTY_TAG, std::string("this_is_empty_tag")},
-// 											TokenStruct{StringTokenType::END_TAG, std::string("test")}};
-// 		std::vector<TokenStruct> output = myXMLParser.returnTokenizedInput();
-// 		REQUIRE(result.size() == output.size());
-// 		success = myXMLParser.parseTokenizedInput();
-// 		REQUIRE(success);
-// 		output = myXMLParser.returnTokenizedInput();
-// 		REQUIRE(result.size() == output.size());
-// 		for (int i = 0; i < result.size(); i++) {
-// 			REQUIRE(result[i].tokenType == output[i].tokenType);
-// 			REQUIRE(result[i].tokenString.compare(output[i].tokenString) == 0);
-// 		}
-// }
+TEST_CASE( "Test XMLParser parseTokenizedInput Handout-0", "[XMLParser]" )
+{
+	   INFO("Hint: tokenize single element test of XMLParse");
+		// Create an instance of XMLParse
+		XMLParser myXMLParser;
+		string testString = "<test myattr='abcdef'>stuff<this_is_empty_tag/></test>";
+		bool success;
+		success = myXMLParser.tokenizeInputString(testString);
+		REQUIRE(success);
+		std::vector<TokenStruct> result = {TokenStruct{StringTokenType::START_TAG, std::string("test")},
+											TokenStruct{StringTokenType::CONTENT, std::string("stuff")},
+											TokenStruct{StringTokenType::EMPTY_TAG, std::string("this_is_empty_tag")},
+											TokenStruct{StringTokenType::END_TAG, std::string("test")}};
+		std::vector<TokenStruct> output = myXMLParser.returnTokenizedInput();
+		REQUIRE(result.size() == output.size());
+		success = myXMLParser.parseTokenizedInput();
+		REQUIRE(success);
+		output = myXMLParser.returnTokenizedInput();
+		REQUIRE(result.size() == output.size());
+		for (int i = 0; i < result.size(); i++) {
+			REQUIRE(result[i].tokenType == output[i].tokenType);
+			REQUIRE(result[i].tokenString.compare(output[i].tokenString) == 0);
+		}
+}
 
-// TEST_CASE( "Test XMLParser Final Handout-0", "[XMLParser]" )
-// {
-// 	   INFO("Hint: Product");
-// 		// Create an instance of XMLParse
-// 		XMLParser myXMLParser;
-// 		ifstream myfile ("./TestFile.txt");
-// 		std::string inputString((std::istreambuf_iterator<char>(myfile) ), (std::istreambuf_iterator<char>()) );
+TEST_CASE( "Test XMLParser Final Handout-0", "[XMLParser]" )
+{
+	   INFO("Hint: Product");
+		// Create an instance of XMLParse
+		XMLParser myXMLParser;
+		ifstream myfile ("./TestFile.txt");
+		std::string inputString((std::istreambuf_iterator<char>(myfile) ), (std::istreambuf_iterator<char>()) );
 		
-// 		bool success;
-// 		success = myXMLParser.tokenizeInputString(inputString);
-// 		REQUIRE(success);
-// 		success = myXMLParser.parseTokenizedInput();
-// 		REQUIRE(success);
-// 		REQUIRE(myXMLParser.containsElementName("catalog"));
-// 		REQUIRE(myXMLParser.frequencyElementName("catalog") == 1);
-// 		REQUIRE(myXMLParser.containsElementName("product"));
-// 		REQUIRE(myXMLParser.frequencyElementName("product") == 1);
-// 		REQUIRE(myXMLParser.containsElementName("catalog_item"));
-// 		REQUIRE(myXMLParser.frequencyElementName("catalog_item") == 2);
-// 		REQUIRE(myXMLParser.containsElementName("item_number"));
-// 		REQUIRE(myXMLParser.frequencyElementName("item_number") == 2);
-// 		REQUIRE(myXMLParser.containsElementName("size"));
-// 		REQUIRE(myXMLParser.frequencyElementName("size") == 6);
-// 		REQUIRE(myXMLParser.containsElementName("color_swatch"));
-// 		REQUIRE(myXMLParser.frequencyElementName("color_swatch") == 15);
-// }
+		bool success;
+		success = myXMLParser.tokenizeInputString(inputString);
+		REQUIRE(success);
+		success = myXMLParser.parseTokenizedInput();
+		REQUIRE(success);
+		REQUIRE(myXMLParser.containsElementName("catalog"));
+		REQUIRE(myXMLParser.frequencyElementName("catalog") == 1);
+		REQUIRE(myXMLParser.containsElementName("product"));
+		REQUIRE(myXMLParser.frequencyElementName("product") == 1);
+		REQUIRE(myXMLParser.containsElementName("catalog_item"));
+		REQUIRE(myXMLParser.frequencyElementName("catalog_item") == 2);
+		REQUIRE(myXMLParser.containsElementName("item_number"));
+		REQUIRE(myXMLParser.frequencyElementName("item_number") == 2);
+		REQUIRE(myXMLParser.containsElementName("size"));
+		REQUIRE(myXMLParser.frequencyElementName("size") == 6);
+		REQUIRE(myXMLParser.containsElementName("color_swatch"));
+		REQUIRE(myXMLParser.frequencyElementName("color_swatch") == 15);
+}
 
