@@ -45,7 +45,7 @@ private:
 
   T * data;
   // number of elements that can be added before reallocation (space remaining)
-  std::size_t capacity;
+  //std::size_t capacity;
   // current allocated memory
   std::size_t size;
   
