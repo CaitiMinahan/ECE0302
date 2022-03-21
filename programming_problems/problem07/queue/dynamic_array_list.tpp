@@ -40,13 +40,16 @@ DynamicArrayList<T>::~DynamicArrayList()
 template <typename T>
 DynamicArrayList<T>& DynamicArrayList<T>::operator=(DynamicArrayList<T> x)
 {
+  if(size == 0) data = new T[1];
+  else data = new T[x.size];
+
   //set the size ptrs to the same element
   size = x.size;
 
+  //copy every element from x into the new datum
   for(int i = 0; i < size; i++){
-    data[i] = x.getEntry(i);
+    data[i] = x.data[i];
   }
-
   return *this; //returns reference to the object, where the object here is bag x (i.e., DynamicBag<T>& x)
                 //we are able to say "return *this" since the return type is a REFERENCE to an object of type T  return *this;
 }
@@ -74,7 +77,7 @@ void DynamicArrayList<T>::insert(std::size_t position, const T& item)
   if(size<0 || position<0 || position>size){
     throw std::range_error("attempt to insert is out of bounds"); }
   
-  T* largerArray; //temp array for copying and allocating more memory
+  T* largerArray = new T[size]; //temp array for copying and allocating more memory
     for(int i=0; i<size; i++){
       std::cout << i << "\n"; 
       std::cout << "insert - copying into temp" << std::endl; 
