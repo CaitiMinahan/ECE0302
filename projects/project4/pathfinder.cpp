@@ -5,6 +5,9 @@
 
 int main(int argc, char *argv[])
 {
+  //helper variables: 
+  int rowEnter, colEnter, sourceNode; 
+
   // get input/output file names from command line arguments
   if (argc != 3) {
     std::cout << "Usage: compare"
@@ -16,11 +19,20 @@ int main(int argc, char *argv[])
   std::string input_file = argv[1];
   std::string output_file = argv[2];
 
-  //scan the image recursively until we have reached an exit 
+  //call the read from file function: 
+  Image<Pixel>ip_image = readFromFile(argv[1]);
+
+  //search for the maze entrance: 
+  //loop through the height of the image (columns)
+  //loop through the width of the image (rows)
+  //see if we are truly at an entrance (where the source node will have a red colored pixel)
+  //validty check to make sure that we are not at the end (make sure position is not found at a green pixel) therefore it can be either white, red or black
+  //make sure we only have one entrance (so only one pixel)
+
+
   //an exit can be found at the edges of the maze (so either max width or max height of the image)
 
   //read in a PNG file, write to it, and compare the output to the solution PNG file
-
 
   //conduct a bread-first-search, when we've visited a white space, mark it as visited
   //keep track of the visited spaces in a deque (to mark our tracks)
