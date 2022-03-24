@@ -22,7 +22,7 @@ public:
   /** Returns the item at the front of the deque
    * throws std::runtime_error if the deque is empty
    */
-  virtual T front() const = 0;
+  virtual T front() const = 0; //like a peek method
 
   /** Add item to the back of the deque
    * may throw std::bad_alloc
@@ -38,7 +38,7 @@ public:
   /** Returns the item at the back of the deque
    * throws std::runtime_error if the deque is empty
    */
-  virtual T back() const = 0;
+  virtual T back() const = 0; //like peek from the back 
 
 };
 

@@ -8,10 +8,10 @@ Node<T>* LinkedList<T>::getCurrentNode(std::size_t position) const{
   Node<T>* currentPtr; 
   //start at the beginning of the list and traverse by means of a for loop: 
   currentPtr = headptr; 
-  for(std::size_t i=0; i<position; i++){ 
+  for(std::size_t i=1; i<position; i++){ 
     //make sure we are within bounds so that we don't get a seg fault: 
     //break condition: creds stackedoverflow 
-    if(position<0 || position>size){
+    if(position<1 || position>size){
       break; //means this loop will break if we try to traverse out of bounds 
     }
     currentPtr = currentPtr->getNext(); //makes the currentPtr continue to point to the next item in the list 
@@ -124,6 +124,7 @@ std::size_t LinkedList<T>::getLength() const noexcept
 {
   //return 0;
   return size; 
+  //return size-1;
 }
 
 template <typename T>
@@ -133,7 +134,7 @@ bool LinkedList<T>::insert(std::size_t position, const T& item)
   //define some conditions to ensure a successful add: 
 
   //make sure we are within bounds of the list: 
-  if(position>=0 && (position<=size)){
+  if(position>=1 && (position<=size+1)){
     //condition for inserting at the beginning: 
     // 1) create new node to be added to the beginning 
     //   a) set item 
@@ -142,7 +143,7 @@ bool LinkedList<T>::insert(std::size_t position, const T& item)
     //   a) make head point to this new first node 
     // 3) increment item count 
     Node<T>* newPtr = new Node<T>(item); //creates the new node to be added which contains 'item'
-    if(position==0){
+    if(position==1){
       newPtr->setNext(headptr); //setNext as headptr -- make next point to former first node
       headptr = newPtr; 
     }
@@ -167,7 +168,7 @@ bool LinkedList<T>::insert(std::size_t position, const T& item)
   }
   return true; //denote successful insertion 
   //make sure we can't insert in an invalid place: 
-  if(position<0 || position>size){
+  if(position<1 || position>size){
     return false; 
     }
   }
@@ -187,8 +188,8 @@ bool LinkedList<T>::remove(std::size_t position)
   //2) update the headptr if the index==0
   //3) update the tail ptr if the index i is at the end of the list 
   Node<T>* newPtr = nullptr; //creates the new node 
-  if(position>=0 && (position<=size)){
-    if(position==0){
+  if(position>=1 && (position<=size+1)){
+    if(position==1){
       newPtr = headptr; 
       headptr = headptr->getNext(); //shift the headptr since we deleted the spot before it
     }
@@ -211,7 +212,7 @@ bool LinkedList<T>::remove(std::size_t position)
   }  
   return true; //denote successful remove
 
-  if(position<0 || position>size){
+  if(position<1 || position>size){
     return false; 
     }
 }
@@ -229,7 +230,7 @@ template <typename T>
 T LinkedList<T>::getEntry(std::size_t position) const
 {
   //get a copy of the item at the position  
-  if(position>=0 && position <= size){
+  if(position>=1 && position <= size){
     Node<T>* newPtr = getCurrentNode(position); //save node (i)
     return newPtr->getItem() ; //return copy of the item at that position in the list 
   }
@@ -239,9 +240,9 @@ T LinkedList<T>::getEntry(std::size_t position) const
 template <typename T>
 void LinkedList<T>::setEntry(std::size_t position, const T& newValue)
 {
-  if(position>=0 && position <= size){
+  if(position>=1 && position <= size+1){
     Node<T>* newPtr = new Node<T>(newValue); 
-    if(position==0){
+    if(position==1){
       newPtr->setNext(headptr); 
       headptr = newPtr; //set the headptr 
     }

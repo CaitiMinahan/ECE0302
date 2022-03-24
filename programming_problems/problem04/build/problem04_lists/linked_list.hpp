@@ -37,10 +37,10 @@ public:
   // remove all items from the list
   void clear();
 
-  // get a copy of the item at position using 0-based indexing
+  // get a copy of the item at position using 1-based indexing
   T getEntry(std::size_t position) const;
 
-  // set the value of the item at position using 0-based indexing
+  // set the value of the item at position using 1-based indexing
   void setEntry(std::size_t position, const T& newValue);
 
 private:
