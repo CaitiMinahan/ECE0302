@@ -40,13 +40,39 @@ std::size_t SortedList<T, L>::getLength()
 template <typename T, typename L>
 void SortedList<T, L>::insert(const T& item)
 {
-  // TODO
+  //have conditions of where to insert an item at the ordered position
+  //NOTE: we must have our list be in ASCENDING order: 
+
+  //traverse list, insert accordingly 
+  int pos = 0; //pos represents location in the list where we insert the higher valued item
+  for(int i=0; i<plist.getLength(); i++){
+    if(plist.getEntry(i)<item) pos++; //skip through list until we can insert the higher valued item
+  }
+  //insert item once we are done incrementing:
+  plist.insert(pos, item);
+
+  //print out the list:
+  for(int i=0; i<plist.getLength(); i++){
+    std::cout << plist.getEntry(i) << std::endl; 
+  }
+
 }
 
 template <typename T, typename L>
 void SortedList<T, L>::remove(const T& item)
 {
-  // TODO
+  //traverse list, insert accordingly 
+  int pos = 0; //pos represents location in the list where we insert the higher valued item
+  for(int i=0; i<plist.getLength(); i++){
+    if(plist.getEntry(i)<item) pos++; //skip through list until we can insert the higher valued item
+  }
+  //insert item once we are done incrementing:
+  plist.remove(pos);
+
+  //print out the list:
+  for(int i=0; i<plist.getLength(); i++){
+    std::cout << plist.getEntry(i) << std::endl; 
+  }
 }
 
 template <typename T, typename L>
@@ -70,6 +96,14 @@ T SortedList<T, L>::getEntry(std::size_t position)
 template <typename T, typename L>
 long int SortedList<T, L>::getPosition(const T& newValue)
 {
-  // TODO
-  return 0;
+  // get the position of the first occurance of item or negated position
+  // where it would be inserted.
+  //return 0;
+  for(long int i=0; i<plist.getLength(); i++){
+    if(plist.getEntry(i)==newValue){
+      return i; 
+    }
+  }
+  throw std::range_error("item not in list"); 
+  return -1; 
 }
