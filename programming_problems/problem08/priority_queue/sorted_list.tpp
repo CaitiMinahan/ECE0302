@@ -103,7 +103,7 @@ long int SortedList<T, L>::getPosition(const T& newValue)
     if(plist.getEntry(i)==newValue){
       return i; 
     }
+    else return -i; //if item is not in the list, return the negated index
   }
-  throw std::range_error("item not in list"); 
-  return -1; 
+ // throw std::range_error("item not in list"); 
 }
