@@ -52,9 +52,9 @@ void SortedList<T, L>::insert(const T& item)
   plist.insert(pos, item);
 
   //print out the list:
-  for(int i=0; i<plist.getLength(); i++){
-    std::cout << plist.getEntry(i) << std::endl; 
-  }
+  // for(int i=0; i<plist.getLength(); i++){
+  //   std::cout << plist.getEntry(i) << std::endl; 
+  // }
 
 }
 
@@ -70,9 +70,9 @@ void SortedList<T, L>::remove(const T& item)
   plist.remove(pos);
 
   //print out the list:
-  for(int i=0; i<plist.getLength(); i++){
-    std::cout << plist.getEntry(i) << std::endl; 
-  }
+  // for(int i=0; i<plist.getLength(); i++){
+  //   std::cout << plist.getEntry(i) << std::endl; 
+  // }
 }
 
 template <typename T, typename L>
@@ -103,7 +103,15 @@ long int SortedList<T, L>::getPosition(const T& newValue)
     if(plist.getEntry(i)==newValue){
       return i; 
     }
-    else return -i; //if item is not in the list, return the negated index
+    //std::cout<< -i << std::endl; 
+    else if(i==plist.getLength()-1){
+      return -1*(i+1); 
+    }
+    else if((newValue>plist.getEntry(i)) || (newValue<plist.getEntry(i+1)) ){
+      return -1*(i+1); 
+    }
+    //return -i; //if item is not in the list, return the negated index
   }
- // throw std::range_error("item not in list"); 
+ //throw std::range_error("item not in list"); 
+ return -1*(plist.getLength()); 
 }
