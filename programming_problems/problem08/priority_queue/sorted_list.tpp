@@ -107,7 +107,7 @@ long int SortedList<T, L>::getPosition(const T& newValue)
     else if(i==plist.getLength()-1){
       return -1*(i+1); 
     }
-    else if((newValue>plist.getEntry(i)) || (newValue<plist.getEntry(i+1)) ){
+    else if((newValue>plist.getEntry(i)) && (newValue<plist.getEntry(i+1)) ){
       return -1*(i+1); 
     }
     //return -i; //if item is not in the list, return the negated index

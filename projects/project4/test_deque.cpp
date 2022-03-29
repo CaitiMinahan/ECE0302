@@ -65,28 +65,28 @@ TEST_CASE( "Tests copy constructor", "[deque]" ) {
     D1.pushFront(2); 
     D1.pushFront(3); 
     //at this point, queue should look like this: 321
-    D1.pushBack(1);
-    D1.pushBack(2);
-    D1.pushBack(3); 
-    //at this point, queue should look like this; 321123
+    D1.pushFront(3); //should be the first item in the deque
+    D1.pushFront(2); 
+    D1.pushFront(1); 
+    //at this point, queue should look like this; 123321
     REQUIRE(!D1.isEmpty()); //make sure items have been added 
 
     //peek the first item in the deque and then 
     //pop items from the front of the deque 
 
-    //make sure both deques are initially: 321123
-    REQUIRE(D1.front()==3); 
-    REQUIRE(D1.back()==3);
+    //make sure both deques are initially: 123321
+    REQUIRE(D1.front()==1); 
+    REQUIRE(D1.back()==1);
     D1.popFront(); 
     D1.popBack(); 
-    //queue: 2112
+    //queue: 2332
     REQUIRE(D1.front()==2); 
     REQUIRE(D1.back()==2);
     D1.popFront(); 
     D1.popBack(); 
-    //queue: 11
-    REQUIRE(D1.front()==1); 
-    REQUIRE(D1.back()==1);
+    //queue: 33
+    REQUIRE(D1.front()==3); 
+    REQUIRE(D1.back()==3);
     D1.popFront(); 
     D1.popBack(); 
     //now, the deque should be empty 
@@ -100,32 +100,32 @@ TEST_CASE( "Tests copy assignment", "[deque]" ) {
     Deque<int> D1; 
     REQUIRE(D1.isEmpty()); //start with an empty stack
     //add items to the front of the deque    
-    D1.pushFront(1); //should be the first item in the deque
-    D1.pushFront(2); 
-    D1.pushFront(3); 
-    //at this point, queue should look like this: 321
-    D1.pushBack(1);
-    D1.pushBack(2);
+    D1.pushBack(1); //should be the first item in the deque
+    D1.pushBack(2); 
     D1.pushBack(3); 
-    //at this point, queue should look like this; 321123
+    //at this point, queue should look like this: 123
+    D1.pushBack(3);
+    D1.pushBack(2);
+    D1.pushBack(1); 
+    //at this point, queue should look like this; 123321
     REQUIRE(!D1.isEmpty()); //make sure items have been added 
 
     //peek the first item in the deque and then 
     //pop items from the front of the deque 
 
-    //make sure both deques are initially: 321123
-    REQUIRE(D1.front()==3); 
-    REQUIRE(D1.back()==3);
+    //make sure both deques are initially: 123321
+    REQUIRE(D1.front()==1); 
+    REQUIRE(D1.back()==1);
     D1.popFront(); 
     D1.popBack(); 
-    //queue: 2112
+    //queue: 2332
     REQUIRE(D1.front()==2); 
     REQUIRE(D1.back()==2);
     D1.popFront(); 
     D1.popBack(); 
-    //queue: 11
-    REQUIRE(D1.front()==1); 
-    REQUIRE(D1.back()==1);
+    //queue: 33
+    REQUIRE(D1.front()==3); 
+    REQUIRE(D1.back()==3);
     D1.popFront(); 
     D1.popBack(); 
     //now, the deque should be empty 
@@ -135,32 +135,32 @@ TEST_CASE( "Tests copy assignment", "[deque]" ) {
     Deque<int> D2; 
     REQUIRE(D2.isEmpty()); //start with an empty stack
     //add items to the front of the deque    
-    D2.pushFront(1); //should be the first item in the deque
-    D2.pushFront(2); 
-    D2.pushFront(3); 
-    //at this point, queue should look like this: 321
-    D2.pushBack(1);
-    D2.pushBack(2);
+    D2.pushBack(1); //should be the first item in the deque
+    D2.pushBack(2); 
     D2.pushBack(3); 
-    //at this point, queue should look like this; 321123
+    //at this point, queue should look like this: 123
+    D2.pushBack(3);
+    D2.pushBack(2);
+    D2.pushBack(1); 
+    //at this point, queue should look like this; 123321
     REQUIRE(!D2.isEmpty()); //make sure items have been added 
 
     //peek the first item in the deque and then 
     //pop items from the front of the deque 
 
-    //make sure both deques are initially: 321123
-    REQUIRE(D2.front()==3); 
-    REQUIRE(D2.back()==3);
+    //make sure both deques are initially: 123321
+    REQUIRE(D2.front()==1); 
+    REQUIRE(D2.back()==1);
     D2.popFront(); 
     D2.popBack(); 
-    //queue: 2112
+    //queue: 2332
     REQUIRE(D2.front()==2); 
     REQUIRE(D2.back()==2);
     D2.popFront(); 
     D2.popBack(); 
-    //queue: 11
-    REQUIRE(D2.front()==1); 
-    REQUIRE(D2.back()==1);
+    //queue: 33
+    REQUIRE(D2.front()==3); 
+    REQUIRE(D2.back()==3);
     D2.popFront(); 
     D2.popBack(); 
     //now, the deque should be empty 
@@ -169,3 +169,27 @@ TEST_CASE( "Tests copy assignment", "[deque]" ) {
     //set D2=D1 to test the =operator:
     D2=D1; 
 }
+
+// TEST_CASE( "Tests back() method using only pushFront()", "[deque]" ) {
+
+//     Deque<int> D1; 
+//     REQUIRE(D1.isEmpty()); //start with an empty stack
+//     //add items to the front of the deque    
+//     D1.pushFront(1); //should be the first item in the deque
+//     D1.pushFront(2); 
+//     D1.pushFront(3); 
+//     //at this point, queue should look like this: 321
+//     REQUIRE(!D1.isEmpty()); //make sure items have been added 
+
+//     //peek the first item in the deque and then 
+//     //pop items from the front of the deque 
+
+//     //make sure both deques are initially: 321
+//     REQUIRE(D1.front()==3); 
+//     REQUIRE(D1.back()==1);
+//     D1.popFront(); 
+//     D1.popBack(); 
+//     REQUIRE(D1.back()==2);
+//     D1.popBack(); 
+//     REQUIRE(D1.isEmpty()); //start with an empty stack
+// }
