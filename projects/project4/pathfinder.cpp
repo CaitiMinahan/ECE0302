@@ -96,35 +96,6 @@ int main(int argc, char *argv[])
     //pop the current pos and keep searching: 
     D.popFront(); 
 
-    //search the next column and see if there's a wall and if we have already visited that position before:
-    //search for (r, c+1)
-    if(ip_image(node.y+1, node.x)!= BLACK && !BFS[node.x][node.y+1]){
-      //mark that we have visited this position
-      BFS[node.x][node.y+1] = true; 
-      //create new node to hold current position: 
-      currentPos newNode; 
-      newNode.x = node.x; 
-      newNode.y = node.y+1; 
-      //add the visited node
-      curNode newCurrent = {newNode, newCurrent.distance++};
-      //add the visited position to the deque:
-      D.pushBack(newCurrent); 
-    }
-
-    //search the previous column and see if there's a wall and if we have already visited that position before: 
-    if(ip_image(node.y-1, node.x)!= BLACK && !BFS[node.x][node.y-1]){
-      //mark that we have visited this position
-      BFS[node.x][node.y-1] = true; 
-      //create new node to hold current position: 
-      currentPos newNode; 
-      newNode.x = node.x; 
-      newNode.y = node.y-1; 
-      //add the visited node
-      curNode newCurrent = {newNode, newCurrent.distance++};
-      //add the visited position to the deque:
-      D.pushBack(newCurrent); 
-    }
-    
     //search for the previous row and see if there's a wall and if we have already visited that position before: 
     //search for (r-1, c)
     if(ip_image(node.y, node.x-1)!=BLACK && !BFS[node.x-1][node.y]){
@@ -149,6 +120,35 @@ int main(int argc, char *argv[])
       currentPos newNode; 
       newNode.x = node.x+1; 
       newNode.y = node.y; 
+      //add the visited node
+      curNode newCurrent = {newNode, newCurrent.distance++};
+      //add the visited position to the deque:
+      D.pushBack(newCurrent); 
+    }
+
+    //search the previous column and see if there's a wall and if we have already visited that position before: 
+    if(ip_image(node.y-1, node.x)!= BLACK && !BFS[node.x][node.y-1]){
+      //mark that we have visited this position
+      BFS[node.x][node.y-1] = true; 
+      //create new node to hold current position: 
+      currentPos newNode; 
+      newNode.x = node.x; 
+      newNode.y = node.y-1; 
+      //add the visited node
+      curNode newCurrent = {newNode, newCurrent.distance++};
+      //add the visited position to the deque:
+      D.pushBack(newCurrent); 
+    }
+
+    //search the next column and see if there's a wall and if we have already visited that position before:
+    //search for (r, c+1)
+    if(ip_image(node.y+1, node.x)!= BLACK && !BFS[node.x][node.y+1]){
+      //mark that we have visited this position
+      BFS[node.x][node.y+1] = true; 
+      //create new node to hold current position: 
+      currentPos newNode; 
+      newNode.x = node.x; 
+      newNode.y = node.y+1; 
       //add the visited node
       curNode newCurrent = {newNode, newCurrent.distance++};
       //add the visited position to the deque:
