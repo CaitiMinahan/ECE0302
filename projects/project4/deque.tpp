@@ -12,12 +12,7 @@ Deque<T>::Deque(){
 template <typename T>
 Deque<T>::Deque(const Deque& x){
     //makes copy of the deque in a singly-linked list 
-    //set each item in the list as the contents we access through set() and get methods()
-
-    //for the entire length of the deque, copy elements from the deque, into a linked list: 
-    for(int i=0; i<x.d.getLength(); i++){
-        d.setEntry(i, x.getEntry(i)); 
-    }
+    d = x.d; //uses the linked list constructor implementation 
 }
 template <typename T>
 Deque<T>::~Deque(){
@@ -28,12 +23,8 @@ Deque<T>::~Deque(){
 template <typename T>
 Deque<T>& Deque<T>::operator=(const Deque<T>& x){
     //makes copy of the deque in a singly-linked list 
-    //set each item in the list as the contents we access through set() and get methods()
+    d = x.d; 
 
-    //for the entire length of the deque, copy elements from the deque, into a linked list: 
-    for(int i=0; i<x.d.getLength(); i++){
-        d.setEntry(i, x.getEntry(i)); 
-    }
     //return reference 
     return *this;
 }
