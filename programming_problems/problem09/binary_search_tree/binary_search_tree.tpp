@@ -101,8 +101,69 @@ template <typename KeyType, typename ItemType>
 bool BinarySearchTree<KeyType, ItemType>::insert(
     const KeyType& key, const ItemType& item)
 {
-    // TODO 
-    return false;
+    //start initially with curr = root and parent = 0
+    Node<KeyType, ItemType>* curr = new Node<KeyType, ItemType>; 
+    curr = root; 
+
+    //1) create a node with the provided key and containing the new item 
+    Node<KeyType, ItemType>* newNode = new Node<KeyType, ItemType>;
+    //have the key-value pair point to the insert() method parameters:
+    newNode->data = item; 
+    newNode->key = key;  
+    //initialize parent node as 0: 
+    Node<KeyType, ItemType>* parent = new Node<KeyType, ItemType>;
+    parent = nullptr; 
+
+    //2) check for an empty tree 
+    if(isEmpty()){
+        //if empty, insert the new node as the root of the tree:
+        root = newNode; 
+        newNode = nullptr; //since root is reassigned 
+        curr = nullptr; //since root is reassigned 
+        delete curr; 
+        delete newNode; 
+        delete parent; 
+
+        return true; //successfully inserted at the node 
+    }
+
+    //3) if not empty, search for the correct insert position utilizing the provided search method
+    //and insert the new node 
+    if(!isEmpty()){
+        //search if the key already exists (must insert at a unique key):
+        search(key, curr, parent); //call search method with curr = root and parent = 0
+        parent = nullptr; 
+
+        //condition for finding a matching key (means we cannot insert):
+        if(curr->data!=item){
+            //if key < last visited 
+            if(key<curr->key){
+                //insert left child 
+                curr->left = newNode; 
+            }
+            //if key > last visited 
+            if(key<curr->key){
+                //insert right child
+                curr ->right = newNode; 
+            }
+            //deallocate: 
+            newNode = nullptr; 
+            curr = nullptr; 
+            delete curr; 
+            delete newNode; 
+            delete parent; 
+
+            return true; //successful insert 
+        }
+        //otherwise, if we have found the matching key, we return false and cannot insert: 
+        newNode = nullptr; 
+        curr = nullptr; 
+        delete curr; 
+        delete newNode; 
+        delete parent; 
+
+        return false; 
+    }
 }
 
 template <typename KeyType, typename ItemType>
@@ -136,20 +197,131 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
     if (isEmpty())
         return false; // empty tree
 
-    // TODO
+    //1) create a node with the provided key containing the new item: 
+    //start initially with curr = root and parent = 0
+    Node<KeyType, ItemType>* curr = new Node<KeyType, ItemType>; 
+    curr = root; 
 
+    //initialize parent node as 0: 
+    Node<KeyType, ItemType>* parent = new Node<KeyType, ItemType>;
+    parent = nullptr;
 
-    // case one thing in the tree
+    //search if the key already exists (must insert at a unique key):
+    search(key, curr, parent); //call search method with curr = root and parent = 0
+ 
+    //2) if not empty, search for the key using the provided search method: 
+    if(!isEmpty()){
+        //condition for finding a matching key (means we cannot insert):
+        if(curr->key!=key){
+            //deallocate: 
+            curr = nullptr; 
+            parent = nullptr;
+            delete curr; 
+            delete parent; 
 
-    // case, found deleted item at leaf
+            return false; 
+        }
+    //3) if the key is found, consider the cases below and determine how to node and maintain tree structure:
+        if(curr->key==key){
+            // case 1: one thing in the tree (nothing to the left or right and key is located at the root)
+            if(root->left==nullptr && root->right==nullptr && key==root->key){
+                //then we can just simply delete it: 
+                root = nullptr; 
+                curr = nullptr; 
+                parent = nullptr; 
+                delete curr; 
+                delete parent; 
 
-    // case, item to delete has only a right child
+                return true; //successful remove
+            }
+            // case 2: found deleted item at leaf (parent is not nullptr but curr is the deleted item)
+            if(parent!=nullptr && curr->left==nullptr && curr->right==nullptr){
+                //test which side the deleted leaf is located (right or left?):
+                if(parent->left == curr){
+                    //then delete the left leaf
+                    parent->left = nullptr; 
+                }
+                 //else delete the right leaf 
+                else parent->right = nullptr; 
 
-    // case, item to delete has only a left child
+                //after setting them to null, we must delete the nodes: 
+                delete curr; 
+                parent = nullptr; 
+                delete parent; 
 
-    // case, item to delete has two children
+                return true; //successful remove
+            }
+            // case 3: item to delete has only a right child
+            if(curr->left==nullptr && curr->right!=nullptr){
+                //need to reassign nodes to make everything leftmost
+                if(curr == root){
+                    root = curr->right; //reassign the root 
+                }
+                else if(parent->left == curr){
+                    parent->left = curr->right; //reassign to make curr leftmost in the subtree
+                }
+                else{
+                    parent->right = curr->right; 
+                }
+                parent = nullptr; 
+                delete curr; 
+                delete parent; 
+                
+                return true; //successful remove
+            }
+            // case 4: item to delete has only a left child
+            if(curr->right==nullptr && curr->left!=nullptr){
+                //need to reassign nodes to make everything leftmost
+                if(curr == root){
+                    root = curr->left; //reassign the root 
+                }
+                else if(parent->left == curr){
+                    parent->left = curr->left; //reassign to make curr leftmost in the subtree
+                }
+                else{
+                    parent->right = curr->left; 
+                }
+                parent = nullptr; 
+                delete curr; 
+                delete parent; 
+                
+                return true; //successful remove
+            }
+            // case 5: item to delete has two children
+            //we need to use an in-order traversal:
+            if(curr->left!=nullptr && curr->right!=nullptr){
+                //algorithm: 
+                Node<KeyType, ItemType>* in = new Node<KeyType, ItemType>;
+                in = nullptr; 
+                Node<KeyType, ItemType>* inParent = new Node<KeyType, ItemType>;
+                inParent = nullptr;
 
+                //find the in-order successor
+                inorder(curr->right, in, inParent); //in-order successor is the leftmost node of the right subtree 
+
+                //copy the data from the in-order successor to the node flagged for deletion
+                curr->key = in->key; 
+                curr->data = in->data; 
+                
+                //delete the in-order successor
+                if(inParent->left == in) inParent->left = nullptr; 
+                else inParent->right = nullptr; 
+
+                delete in; 
+                inParent = nullptr; 
+                delete inParent; 
+
+                curr = nullptr; 
+                delete curr; 
+                parent = nullptr; 
+                delete parent; 
+
+                //done
+                return true; 
+            }
+        }
     return false; // default should never get here
+    }
 }
 
 template <typename KeyType, typename ItemType>
@@ -157,7 +329,11 @@ void BinarySearchTree<KeyType, ItemType>::inorder(Node<KeyType, ItemType>* curr,
     Node<KeyType, ItemType>*& in, Node<KeyType, ItemType>*& parent)
 {
     // TODO: find inorder successor of "curr" and assign to "in"
-
+    if(curr->left == nullptr){
+        in = curr; 
+        return; 
+    }
+    inorder(curr->left, in, curr); 
 }
 
 template <typename KeyType, typename ItemType>
