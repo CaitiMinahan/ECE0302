@@ -129,7 +129,7 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
 
     //3) if not empty, search for the correct insert position utilizing the provided search method
     //and insert the new node 
-    if(!isEmpty()){
+    // if(!isEmpty()){
         //search if the key already exists (must insert at a unique key):
         search(key, curr, parent); //call search method with curr = root and parent = 0
         parent = nullptr; 
@@ -142,10 +142,10 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
                 curr->left = newNode; 
             }
             //if key > last visited 
-            if(key<curr->key){
+           // if(key<curr->key){
                 //insert right child
                 curr ->right = newNode; 
-            }
+            //}
             //deallocate: 
             newNode = nullptr; 
             curr = nullptr; 
@@ -163,7 +163,7 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
         delete parent; 
 
         return false; 
-    }
+   // }
 }
 
 template <typename KeyType, typename ItemType>
@@ -210,7 +210,7 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
     search(key, curr, parent); //call search method with curr = root and parent = 0
  
     //2) if not empty, search for the key using the provided search method: 
-    if(!isEmpty()){
+    //if(!isEmpty()){
         //condition for finding a matching key (means we cannot insert):
         if(curr->key!=key){
             //deallocate: 
@@ -223,6 +223,13 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
         }
     //3) if the key is found, consider the cases below and determine how to node and maintain tree structure:
         if(curr->key==key){
+            curr = nullptr; 
+            parent = nullptr; 
+            delete curr; 
+            delete parent; 
+
+            return false; 
+        }
             // case 1: one thing in the tree (nothing to the left or right and key is located at the root)
             if(root->left==nullptr && root->right==nullptr && key==root->key){
                 //then we can just simply delete it: 
@@ -319,9 +326,9 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
                 //done
                 return true; 
             }
-        }
-    return false; // default should never get here
-    }
+       // }
+    //return false; // default should never get here
+    //}
 }
 
 template <typename KeyType, typename ItemType>
