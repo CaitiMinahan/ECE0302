@@ -115,7 +115,7 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
     parent = nullptr; 
 
     //2) check for an empty tree 
-    if(isEmpty()){
+    if(root==nullptr){
         //if empty, insert the new node as the root of the tree:
         root = newNode; 
         newNode = nullptr; //since root is reassigned 
@@ -142,10 +142,9 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
                 curr->left = newNode; 
             }
             //if key > last visited 
-           // if(key<curr->key){
-                //insert right child
-                curr ->right = newNode; 
-            //}
+            //insert right child
+            else curr ->right = newNode; 
+
             //deallocate: 
             newNode = nullptr; 
             curr = nullptr; 
@@ -163,7 +162,6 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
         delete parent; 
 
         return false; 
-   // }
 }
 
 template <typename KeyType, typename ItemType>
@@ -222,113 +220,100 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
             return false; 
         }
     //3) if the key is found, consider the cases below and determine how to node and maintain tree structure:
-        if(curr->key==key){
+        // case 1: one thing in the tree (nothing to the left or right and key is located at the root)
+        if(root->left==nullptr && root->right==nullptr && key==root->key){
+            //then we can just simply delete it: 
+            root = nullptr; 
             curr = nullptr; 
             parent = nullptr; 
             delete curr; 
             delete parent; 
 
-            return false; 
+           return true; //successful remove
         }
-            // case 1: one thing in the tree (nothing to the left or right and key is located at the root)
-            if(root->left==nullptr && root->right==nullptr && key==root->key){
-                //then we can just simply delete it: 
-                root = nullptr; 
-                curr = nullptr; 
-                parent = nullptr; 
-                delete curr; 
-                delete parent; 
+        // case 2: found deleted item at leaf (parent is not nullptr but curr is the deleted item)
+        if(parent!=nullptr && curr->left==nullptr && curr->right==nullptr){
+            //test which side the deleted leaf is located (right or left?):
+           if(parent->left == curr){
+                //then delete the left leaf
+                parent->left = nullptr; 
+              }
+             //else delete the right leaf 
+            else parent->right = nullptr; 
 
-                return true; //successful remove
+            //after setting them to null, we must delete the nodes: 
+            delete curr; 
+            parent = nullptr; 
+            delete parent; 
+
+            return true; //successful remove
+       }
+        // case 3: item to delete has only a right child
+        if(curr->left==nullptr && curr->right!=nullptr){
+            //need to reassign nodes to make everything leftmost
+           if(curr == root){
+                root = curr->right; //reassign the root 
             }
-            // case 2: found deleted item at leaf (parent is not nullptr but curr is the deleted item)
-            if(parent!=nullptr && curr->left==nullptr && curr->right==nullptr){
-                //test which side the deleted leaf is located (right or left?):
-                if(parent->left == curr){
-                    //then delete the left leaf
-                    parent->left = nullptr; 
-                }
-                 //else delete the right leaf 
-                else parent->right = nullptr; 
-
-                //after setting them to null, we must delete the nodes: 
-                delete curr; 
-                parent = nullptr; 
-                delete parent; 
-
-                return true; //successful remove
+            else if(parent->left == curr){
+                parent->left = curr->right; //reassign to make curr leftmost in the subtree
             }
-            // case 3: item to delete has only a right child
-            if(curr->left==nullptr && curr->right!=nullptr){
-                //need to reassign nodes to make everything leftmost
-                if(curr == root){
-                    root = curr->right; //reassign the root 
-                }
-                else if(parent->left == curr){
-                    parent->left = curr->right; //reassign to make curr leftmost in the subtree
-                }
-                else{
-                    parent->right = curr->right; 
-                }
-                parent = nullptr; 
-                delete curr; 
-                delete parent; 
+            else parent->right = curr->right; 
+            
+            parent = nullptr; 
+            delete curr; 
+            delete parent; 
                 
-                return true; //successful remove
+            return true; //successful remove
+        }
+        // case 4: item to delete has only a left child
+        if(curr->right==nullptr && curr->left!=nullptr){
+            //need to reassign nodes to make everything leftmost
+            if(curr == root){
+                root = curr->left; //reassign the root 
             }
-            // case 4: item to delete has only a left child
-            if(curr->right==nullptr && curr->left!=nullptr){
-                //need to reassign nodes to make everything leftmost
-                if(curr == root){
-                    root = curr->left; //reassign the root 
-                }
-                else if(parent->left == curr){
-                    parent->left = curr->left; //reassign to make curr leftmost in the subtree
-                }
-                else{
-                    parent->right = curr->left; 
-                }
-                parent = nullptr; 
-                delete curr; 
-                delete parent; 
+            else if(parent->left == curr){
+                parent->left = curr->left; //reassign to make curr leftmost in the subtree
+            }
+            else parent->right = curr->left; 
+
+            parent = nullptr; 
+            delete curr; 
+            delete parent; 
                 
-                return true; //successful remove
-            }
-            // case 5: item to delete has two children
-            //we need to use an in-order traversal:
-            if(curr->left!=nullptr && curr->right!=nullptr){
-                //algorithm: 
-                Node<KeyType, ItemType>* in = new Node<KeyType, ItemType>;
-                in = nullptr; 
-                Node<KeyType, ItemType>* inParent = new Node<KeyType, ItemType>;
-                inParent = nullptr;
+            return true; //successful remove
+        }
+        // case 5: item to delete has two children
+        //we need to use an in-order traversal:
+        if(curr->left!=nullptr && curr->right!=nullptr){
+            //algorithm: 
+            Node<KeyType, ItemType>* in = new Node<KeyType, ItemType>;
+            in = nullptr; 
+            Node<KeyType, ItemType>* inParent = new Node<KeyType, ItemType>;
+            inParent = nullptr;
 
-                //find the in-order successor
-                inorder(curr->right, in, inParent); //in-order successor is the leftmost node of the right subtree 
+            //find the in-order successor
+            inorder(curr->right, in, inParent); //in-order successor is the leftmost node of the right subtree 
 
-                //copy the data from the in-order successor to the node flagged for deletion
-                curr->key = in->key; 
-                curr->data = in->data; 
+            //copy the data from the in-order successor to the node flagged for deletion
+            curr->key = in->key; 
+            curr->data = in->data; 
                 
-                //delete the in-order successor
-                if(inParent->left == in) inParent->left = nullptr; 
-                else inParent->right = nullptr; 
+            //delete the in-order successor
+            if(inParent->left == in) inParent->left = nullptr; 
+            else inParent->right = nullptr; 
 
-                delete in; 
-                inParent = nullptr; 
-                delete inParent; 
+            delete in; 
+            inParent = nullptr; 
+            delete inParent; 
 
-                curr = nullptr; 
-                delete curr; 
-                parent = nullptr; 
-                delete parent; 
+            curr = nullptr; 
+            delete curr; 
+            parent = nullptr; 
+            delete parent; 
 
-                //done
-                return true; 
-            }
-       // }
-    //return false; // default should never get here
-    //}
+            //done
+            return true; 
+        }
 }
 
 template <typename KeyType, typename ItemType>
